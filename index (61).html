@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DémocratieLab — Comprendre les systèmes politiques</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0e1a;
+  --bg-card: #111827;
+  --bg-surface: #1a2236;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-gold: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-green: #10b981;
+  --accent-purple: #8b5cf6;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(255,255,255,0.06);
+  --glow-blue: rgba(59,130,246,0.15);
+  --glow-gold: rgba(245,158,11,0.15);
+  --glow-red: rgba(239,68,68,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background animated mesh */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(6,182,212,0.04) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== NAVIGATION ===== */
+.nav-bar {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.nav-tabs {
+  display: flex; gap: 4px; overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  position: relative;
+}
+.nav-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+.nav-tab.active {
+  color: var(--accent-cyan);
+  background: rgba(6,182,212,0.08);
+  border-color: rgba(6,182,212,0.2);
+}
+
+.nav-progress {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.nav-progress-bar {
+  width: 100px; height: 4px; background: rgba(255,255,255,0.08);
+  border-radius: 2px; overflow: hidden;
+}
+.nav-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  border-radius: 2px; transition: width 0.5s ease;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  margin-top: 64px;
+  position: relative; z-index: 1;
+}
+
+.section {
+  display: none;
+  animation: fadeIn 0.5s ease;
+  padding: 3rem 2rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(20px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+/* ===== HERO / INTRO ===== */
+.hero {
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 99px;
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  background: rgba(59,130,246,0.1);
+  color: var(--accent-blue);
+  border: 1px solid rgba(59,130,246,0.2);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(135deg, #e2e8f0 30%, var(--accent-cyan) 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 650px; margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.hero-start {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 36px;
+  border-radius: 12px;
+  font-size: 1rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: white; border: none; cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+}
+.hero-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(59,130,246,0.4);
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  margin-bottom: 2.5rem;
+}
+.section-header .badge {
+  display: inline-block;
+  padding: 4px 14px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+}
+.badge-blue { background: rgba(59,130,246,0.12); color: var(--accent-blue); }
+.badge-gold { background: rgba(245,158,11,0.12); color: var(--accent-gold); }
+.badge-red { background: rgba(239,68,68,0.12); color: var(--accent-red); }
+.badge-green { background: rgba(16,185,129,0.12); color: var(--accent-green); }
+.badge-purple { background: rgba(139,92,246,0.12); color: var(--accent-purple); }
+
+.section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 900;
+  margin-bottom: 0.6rem;
+}
+.section-header p {
+  color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6;
+  max-width: 700px;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+.card:hover { border-color: rgba(255,255,255,0.1); }
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-weight: 700;
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.card-text {
+  color: var(--text-secondary);
+  line-height: 1.7; font-size: 0.95rem;
+}
+
+/* ===== INFO BOX ===== */
+.info-box {
+  background: var(--bg-surface);
+  border-left: 3px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0;
+}
+.info-box.gold { border-left-color: var(--accent-gold); }
+.info-box.red { border-left-color: var(--accent-red); }
+.info-box.green { border-left-color: var(--accent-green); }
+.info-box.purple { border-left-color: var(--accent-purple); }
+
+.info-box h4 {
+  font-weight: 700; margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.info-box p {
+  color: var(--text-secondary); line-height: 1.7; font-size: 0.9rem;
+}
+
+/* ===== COMPARISON GRID ===== */
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.compare-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.compare-card::before {
+  content: '';
+  position: absolute; top:0; left:0; right:0;
+  height: 3px;
+}
+.compare-card.demo::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+.compare-card.dicta::before { background: linear-gradient(90deg, var(--accent-red), #f97316); }
+.compare-card.commu::before { background: linear-gradient(90deg, var(--accent-red), var(--accent-gold)); }
+.compare-card.capi::before { background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); }
+
+.compare-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 700;
+  margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.compare-card ul {
+  list-style: none; padding: 0;
+}
+.compare-card li {
+  padding: 6px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.compare-card li::before {
+  content: '→';
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ===== QUIZ ===== */
+.quiz-container { margin: 2rem 0; }
+
+.quiz-question {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.2rem;
+}
+
+.quiz-q-text {
+  font-weight: 600; font-size: 1.05rem;
+  margin-bottom: 1rem;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+
+.quiz-q-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(59,130,246,0.12);
+  color: var(--accent-blue);
+  font-size: 0.8rem; font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quiz-options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.quiz-opt {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  transition: all 0.25s ease;
+}
+.quiz-opt:hover:not(.selected) {
+  border-color: rgba(59,130,246,0.3);
+  background: rgba(59,130,246,0.05);
+}
+.quiz-opt.selected { border-color: var(--accent-blue); color: var(--text-primary); }
+.quiz-opt.correct {
+  border-color: var(--accent-green) !important;
+  background: rgba(16,185,129,0.08) !important;
+  color: var(--accent-green) !important;
+}
+.quiz-opt.wrong {
+  border-color: var(--accent-red) !important;
+  background: rgba(239,68,68,0.06) !important;
+  color: var(--accent-red) !important;
+}
+
+.quiz-feedback {
+  margin-top: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb {
+  background: rgba(16,185,129,0.06);
+  border: 1px solid rgba(16,185,129,0.15);
+  color: var(--accent-green);
+}
+.quiz-feedback.wrong-fb {
+  background: rgba(239,68,68,0.06);
+  border: 1px solid rgba(239,68,68,0.15);
+  color: var(--accent-red);
+}
+
+/* ===== VOTE SIMULATOR ===== */
+.vote-sim {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 2rem 0;
+}
+
+.parties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.party-card {
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.party-card:hover { transform: translateY(-2px); }
+.party-card.voted {
+  border-color: var(--accent-blue);
+  background: rgba(59,130,246,0.06);
+  box-shadow: 0 0 20px rgba(59,130,246,0.1);
+}
+
+.party-icon {
+  font-size: 2rem; margin-bottom: 0.5rem;
+}
+.party-name {
+  font-weight: 700; font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+.party-desc {
+  font-size: 0.75rem; color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.vote-results {
+  margin-top: 1.5rem;
+  display: none;
+}
+.vote-results.show { display: block; }
+
+.result-bar-container {
+  margin-bottom: 0.8rem;
+}
+.result-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.82rem; margin-bottom: 4px;
+}
+.result-bar {
+  height: 8px; background: rgba(255,255,255,0.06);
+  border-radius: 4px; overflow: hidden;
+}
+.result-bar-fill {
+  height: 100%; border-radius: 4px;
+  transition: width 1s ease;
+}
+
+/* ===== PROPAGANDA DETECTOR ===== */
+.prop-game {
+  margin: 2rem 0;
+}
+
+.prop-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.prop-message {
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  padding: 1.2rem;
+  background: var(--bg-surface);
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  border-left: 3px solid var(--text-muted);
+}
+
+.prop-btns {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+
+.prop-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.88rem; font-weight: 600;
+  transition: all 0.25s ease;
+}
+.prop-btn:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text-primary);
+}
+.prop-btn.correct-ans {
+  border-color: var(--accent-green) !important;
+  background: rgba(16,185,129,0.08) !important;
+  color: var(--accent-green) !important;
+}
+.prop-btn.wrong-ans {
+  border-color: var(--accent-red) !important;
+  background: rgba(239,68,68,0.06) !important;
+  color: var(--accent-red) !important;
+}
+
+.prop-explain {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  background: rgba(139,92,246,0.06);
+  border: 1px solid rgba(139,92,246,0.15);
+  color: var(--text-secondary);
+  display: none;
+}
+.prop-explain.show { display: block; }
+
+/* ===== SCENARIO SIM ===== */
+.scenario-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+}
+
+.scenario-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; font-weight: 700;
+  margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.scenario-text {
+  color: var(--text-secondary);
+  line-height: 1.7; font-size: 0.92rem;
+  margin-bottom: 1.2rem;
+}
+
+.scenario-choices {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.scenario-choice {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+.scenario-choice:hover {
+  border-color: rgba(59,130,246,0.3);
+  background: rgba(59,130,246,0.04);
+}
+.scenario-choice.chosen {
+  border-color: var(--accent-cyan);
+  color: var(--text-primary);
+}
+
+.scenario-result {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--bg-surface);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  display: none;
+}
+.scenario-result.show { display: block; }
+
+/* ===== TIMELINE ===== */
+.timeline {
+  position: relative;
+  margin: 2rem 0;
+  padding-left: 30px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 12px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), var(--accent-red));
+}
+
+.tl-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 30px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute; left: -24px; top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  border: 2px solid var(--bg-deep);
+}
+.tl-item:nth-child(even)::before { background: var(--accent-purple); }
+.tl-item:nth-child(3n)::before { background: var(--accent-red); }
+
+.tl-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; color: var(--accent-cyan);
+  margin-bottom: 0.3rem;
+}
+.tl-title {
+  font-weight: 700; font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.tl-text {
+  font-size: 0.88rem; color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== SCORE DISPLAY ===== */
+.score-panel {
+  position: fixed; bottom: 20px; right: 20px;
+  background: rgba(17,24,39,0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 20px;
+  z-index: 99;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.score-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.82rem;
+}
+.score-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 0.92rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: white; border: none; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(59,130,246,0.3); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-size: 0.88rem; font-weight: 600;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+.btn-group { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
+
+/* ===== DRAG AND DROP SORT ===== */
+.sortable-list {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 1rem 0;
+}
+.sortable-item {
+  padding: 14px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: grab;
+  font-size: 0.92rem;
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.sortable-item:active { cursor: grabbing; }
+.sortable-item:hover { border-color: rgba(255,255,255,0.12); }
+.sortable-item .drag-handle {
+  color: var(--text-muted); font-size: 1.1rem;
+}
+.sortable-item.drag-over {
+  border-color: var(--accent-cyan);
+  background: rgba(6,182,212,0.05);
+}
+
+/* ===== SPECTRUM BAR ===== */
+.spectrum-container {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.spectrum-bar {
+  height: 16px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, 
+    #dc2626 0%, #f97316 20%, #facc15 35%, 
+    #22c55e 50%, 
+    #3b82f6 65%, #6366f1 80%, #9333ea 100%);
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.spectrum-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.spectrum-marker {
+  position: absolute;
+  top: -8px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid var(--bg-deep);
+  transform: translateX(-50%);
+  cursor: grab;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--bg-deep);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-bar { padding: 0 1rem; }
+  .nav-tabs { display: none; }
+  .section { padding: 2rem 1rem 3rem; }
+  .hero { padding: 4rem 1rem 3rem; }
+  .hero h1 { font-size: 2rem; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .parties-grid { grid-template-columns: repeat(2, 1fr); }
+  .score-panel { bottom: 10px; right: 10px; left: 10px; justify-content: center; }
+}
+
+/* Mobile nav toggle */
+.nav-mobile-toggle {
+  display: none;
+  background: none; border: none;
+  color: var(--text-secondary); font-size: 1.5rem;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .nav-mobile-toggle { display: block; }
+}
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  z-index: 1000;
+  pointer-events: none;
+  animation: confettiFall 2.5s ease-out forwards;
+}
+@keyframes confettiFall {
+  0% { opacity:1; transform: translateY(0) rotate(0deg); }
+  100% { opacity:0; transform: translateY(100vh) rotate(720deg); }
+}
+
+/* Definitions tooltips */
+.def-term {
+  border-bottom: 1px dashed var(--accent-cyan);
+  cursor: help;
+  position: relative;
+}
+.def-term:hover::after {
+  content: attr(data-def);
+  position: absolute;
+  bottom: 100%; left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  width: 260px;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  line-height: 1.5;
+  font-style: normal;
+}
+
+/* Summary counters */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.summary-stat {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.summary-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 900;
+  color: var(--accent-cyan);
+}
+.summary-stat .label {
+  font-size: 0.78rem; color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+/* Cycle diagram */
+.cycle-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+.cycle-step {
+  padding: 12px 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 130px;
+}
+.cycle-arrow {
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-logo">DémocratieLab</div>
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" data-section="intro">Accueil</div>
+    <div class="nav-tab" data-section="democratie">Démocratie</div>
+    <div class="nav-tab" data-section="dictature">Dictature</div>
+    <div class="nav-tab" data-section="ideologies">Idéologies</div>
+    <div class="nav-tab" data-section="propagande">Propagande</div>
+    <div class="nav-tab" data-section="vote">Simulation</div>
+    <div class="nav-tab" data-section="bilan">Bilan</div>
+  </div>
+  <div class="nav-progress">
+    <div class="nav-progress-bar"><div class="nav-progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span id="progressText">0%</span>
+  </div>
+  <button class="nav-mobile-toggle" onclick="toggleMobileNav()">☰</button>
+</nav>
+
+<!-- SCORE -->
+<div class="score-panel">
+  <div class="score-item">⚡ <span class="score-val" id="scoreVal">0</span> pts</div>
+  <div class="score-item">✓ <span class="score-val" id="correctVal">0</span> / <span id="totalVal">0</span></div>
+</div>
+
+<!-- ===== SECTION: INTRO ===== -->
+<div class="main-content">
+<section class="section active" id="intro">
+  <div class="hero">
+    <div class="hero-badge">UAA6 — Le citoyen et l'État</div>
+    <h1>Comprendre les systèmes<br>politiques</h1>
+    <p class="hero-sub">
+      Démocratie, dictature, propagande, capitalisme, communisme… 
+      Ces mots sont partout dans l'actualité. Mais que signifient-ils vraiment ? 
+      Et surtout, comment nous affectent-ils au quotidien ?
+    </p>
+    <button class="hero-start" onclick="goTo('democratie')">Commencer l'exploration →</button>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-stat"><div class="num">6</div><div class="label">Modules</div></div>
+    <div class="summary-stat"><div class="num">25+</div><div class="label">Activités</div></div>
+    <div class="summary-stat"><div class="num">∞</div><div class="label">Réflexions</div></div>
+    <div class="summary-stat"><div class="num">1</div><div class="label">Citoyen éclairé</div></div>
+  </div>
+
+  <div class="card" style="border-left: 3px solid var(--accent-cyan);">
+    <div class="card-title">🎯 Objectifs de cette application</div>
+    <div class="card-text">
+      À travers des activités interactives, tu vas découvrir ce qui distingue une démocratie d'une dictature, comprendre comment la propagande peut menacer nos libertés, et explorer les différences entre capitalisme et communisme. Tu apprendras aussi pourquoi la démocratie représentative — malgré ses défauts — reste le meilleur outil dont disposent les peuples pour s'exprimer et choisir leur avenir.
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION: DÉMOCRATIE ===== -->
+<section class="section" id="democratie">
+  <div class="section-header">
+    <span class="badge badge-blue">Module 1</span>
+    <h2>La démocratie</h2>
+    <p>Un système où le pouvoir appartient au peuple — et où le peuple peut changer d'avis.</p>
+  </div>
+
+  <div class="info-box">
+    <h4>📖 Définition</h4>
+    <p>La <strong>démocratie</strong> (du grec <em>demos</em> = peuple, <em>kratos</em> = pouvoir) est un régime politique dans lequel le pouvoir est exercé par les citoyens, soit directement, soit par l'intermédiaire de représentants élus. Elle repose sur des principes fondamentaux : la séparation des pouvoirs, les libertés individuelles, le pluralisme politique et l'État de droit.</p>
+  </div>
+
+  <!-- Activity: Piliers -->
+  <div class="card">
+    <div class="card-title">🏛️ Activité 1 : Les piliers de la démocratie</div>
+    <div class="card-text" style="margin-bottom:1rem;">Classe ces éléments dans l'ordre d'importance selon toi. Glisse-les pour les réorganiser. Il n'y a pas de mauvaise réponse — c'est ta réflexion qui compte !</div>
+    <div class="sortable-list" id="pillarsList">
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Liberté d'expression</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Séparation des pouvoirs</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Élections libres et régulières</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Indépendance de la justice</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Liberté de la presse</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Droit de vote universel</div>
+      <div class="sortable-item" draggable="true"><span class="drag-handle">⠿</span> Protection des minorités</div>
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <p>💡 En démocratie, <strong>tous ces éléments sont essentiels</strong>. Si l'un d'eux disparaît, la démocratie est en danger. C'est pourquoi on parle de « piliers » : si l'un tombe, l'ensemble peut s'effondrer.</p>
+    </div>
+  </div>
+
+  <!-- Démocratie représentative -->
+  <div class="card">
+    <div class="card-title">🗳️ Démocratie représentative</div>
+    <div class="card-text">
+      En Belgique, comme dans la plupart des démocraties modernes, nous vivons dans une <strong>démocratie représentative</strong>. Cela signifie que nous, les citoyens, ne votons pas directement sur chaque loi. Nous <strong>élisons des représentants</strong> (députés, sénateurs, bourgmestres…) qui vont prendre les décisions en notre nom.
+    </div>
+
+    <div class="cycle-diagram" style="margin-top:1.5rem;">
+      <div class="cycle-step">🧑‍🤝‍🧑 Les citoyens<br><small>votent</small></div>
+      <span class="cycle-arrow">→</span>
+      <div class="cycle-step">🏛️ Les élus<br><small>représentent</small></div>
+      <span class="cycle-arrow">→</span>
+      <div class="cycle-step">📜 Les lois<br><small>sont votées</small></div>
+      <span class="cycle-arrow">→</span>
+      <div class="cycle-step">⚖️ Le gouvernement<br><small>exécute</small></div>
+      <span class="cycle-arrow">→</span>
+      <div class="cycle-step">🔄 Nouvelles élections<br><small>contrôle populaire</small></div>
+    </div>
+
+    <div class="info-box green" style="margin-top:1rem;">
+      <h4>🔑 Le point clé</h4>
+      <p>Ce qui distingue fondamentalement la démocratie de tout autre système, c'est la <strong>possibilité de changer</strong>. Si les citoyens ne sont pas satisfaits de leurs représentants, ils peuvent élire quelqu'un d'autre lors des prochaines élections. C'est ce mécanisme pacifique de <strong>transition du pouvoir</strong> qui rend la démocratie unique.</p>
+    </div>
+  </div>
+
+  <!-- Quiz Démocratie -->
+  <div class="card">
+    <div class="card-title">📝 Quiz : Vérifie ta compréhension</div>
+    <div class="quiz-container" id="quizDemo">
+      <!-- Q1 -->
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">1</span> Que signifie le mot « démocratie » étymologiquement ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Le pouvoir du roi</div>
+          <div class="quiz-opt" data-idx="1">Le pouvoir du peuple</div>
+          <div class="quiz-opt" data-idx="2">Le pouvoir de l'armée</div>
+          <div class="quiz-opt" data-idx="3">Le pouvoir des riches</div>
+        </div>
+        <div class="quiz-feedback">Du grec <em>demos</em> (peuple) et <em>kratos</em> (pouvoir). La démocratie est littéralement le « pouvoir du peuple ».</div>
+      </div>
+      <!-- Q2 -->
+      <div class="quiz-question" data-correct="2">
+        <div class="quiz-q-text"><span class="quiz-q-num">2</span> Qu'est-ce qui caractérise la démocratie représentative ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Les citoyens votent chaque loi directement</div>
+          <div class="quiz-opt" data-idx="1">Un roi prend toutes les décisions</div>
+          <div class="quiz-opt" data-idx="2">Les citoyens élisent des représentants qui décident en leur nom</div>
+          <div class="quiz-opt" data-idx="3">Seuls les riches peuvent voter</div>
+        </div>
+        <div class="quiz-feedback">Dans une démocratie représentative, les citoyens élisent des parlementaires, des députés et des dirigeants qui prennent les décisions politiques en leur nom.</div>
+      </div>
+      <!-- Q3 -->
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">3</span> Si un parti au pouvoir déçoit les citoyens, que peuvent-ils faire en démocratie ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Voter pour un autre parti aux prochaines élections</div>
+          <div class="quiz-opt" data-idx="1">Rien, ils doivent accepter</div>
+          <div class="quiz-opt" data-idx="2">Faire un coup d'État</div>
+          <div class="quiz-opt" data-idx="3">Fuir le pays</div>
+        </div>
+        <div class="quiz-feedback">C'est la force de la démocratie : la possibilité de changement pacifique par le vote. Le peuple a toujours le dernier mot, via les élections.</div>
+      </div>
+      <!-- Q4 -->
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">4</span> En Belgique, combien de députés siègent à la Chambre des Représentants ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">100</div>
+          <div class="quiz-opt" data-idx="1">150</div>
+          <div class="quiz-opt" data-idx="2">200</div>
+          <div class="quiz-opt" data-idx="3">75</div>
+        </div>
+        <div class="quiz-feedback">Le Parlement fédéral belge comprend la Chambre des Représentants avec 150 députés (88 néerlandophones et 62 francophones).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-primary" onclick="goTo('dictature')">Module suivant : La dictature →</button>
+  </div>
+</section>
+
+<!-- ===== SECTION: DICTATURE ===== -->
+<section class="section" id="dictature">
+  <div class="section-header">
+    <span class="badge badge-red">Module 2</span>
+    <h2>La dictature</h2>
+    <p>Quand le pouvoir échappe au peuple et se concentre entre quelques mains.</p>
+  </div>
+
+  <div class="info-box red">
+    <h4>📖 Définition</h4>
+    <p>Une <strong>dictature</strong> est un régime politique dans lequel le pouvoir est exercé par une seule personne ou un petit groupe, sans contrôle démocratique ni respect des libertés individuelles. Il n'y a pas de véritables élections libres, pas de liberté de la presse, et l'opposition est réprimée.</p>
+  </div>
+
+  <!-- Comparaison visuelle -->
+  <div class="compare-grid">
+    <div class="compare-card demo">
+      <h3>🏛️ Démocratie</h3>
+      <ul>
+        <li>Élections libres et régulières</li>
+        <li>Plusieurs partis politiques</li>
+        <li>Liberté d'expression garantie</li>
+        <li>Presse indépendante</li>
+        <li>Justice indépendante du pouvoir</li>
+        <li>Alternance au pouvoir possible</li>
+        <li>Droit de manifester</li>
+        <li>Opposition légale</li>
+      </ul>
+    </div>
+    <div class="compare-card dicta">
+      <h3>⛓️ Dictature</h3>
+      <ul>
+        <li>Pas d'élections libres (ou truquées)</li>
+        <li>Parti unique ou dominant</li>
+        <li>Censure et surveillance</li>
+        <li>Médias contrôlés par l'État</li>
+        <li>Justice soumise au pouvoir</li>
+        <li>Dirigeant à vie</li>
+        <li>Manifestations interdites</li>
+        <li>Opposition emprisonnée ou éliminée</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Activity: Corée du Nord -->
+  <div class="card">
+    <div class="card-title">🌍 Focus : La Corée du Nord</div>
+    <div class="card-text">
+      La Corée du Nord est l'un des exemples les plus extrêmes de dictature totalitaire au monde. Officiellement appelée « République populaire démocratique de Corée » (RPDC), elle n'a de démocratique que le nom. Le pays est dirigé par la famille Kim depuis 1948 — un pouvoir transmis de père en fils sur trois générations.
+    </div>
+    <div class="info-box red" style="margin-top:1rem;">
+      <p>🔍 <strong>Signes observables d'une dictature</strong> : propagande omniprésente, culte de la personnalité du leader, absence totale de liberté d'expression, contrôle de la population par la peur, misère cachée, exécutions publiques, camps de prisonniers politiques, information contrôlée, impossibilité de quitter le pays.</p>
+    </div>
+  </div>
+
+  <!-- Quiz dictature -->
+  <div class="card">
+    <div class="card-title">📝 Quiz : Démocratie ou dictature ?</div>
+    <div class="card-text" style="margin-bottom:1rem;">Pour chaque situation, détermine s'il s'agit d'une caractéristique de la démocratie ou de la dictature.</div>
+    <div class="quiz-container" id="quizDicta">
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">1</span> Un journaliste est emprisonné pour avoir critiqué le président.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Démocratie</div>
+          <div class="quiz-opt" data-idx="1">Dictature</div>
+        </div>
+        <div class="quiz-feedback">En démocratie, la liberté de la presse est un droit fondamental. Emprisonner un journaliste pour ses critiques est un acte autoritaire typique des dictatures.</div>
+      </div>
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">2</span> Après une défaite électorale, le parti au pouvoir quitte pacifiquement ses fonctions.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Démocratie</div>
+          <div class="quiz-opt" data-idx="1">Dictature</div>
+        </div>
+        <div class="quiz-feedback">La transition pacifique du pouvoir est l'un des signes les plus forts d'une démocratie en bonne santé. Le perdant accepte le résultat et laisse sa place.</div>
+      </div>
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">3</span> L'accès à Internet est contrôlé et des sites sont bloqués par le gouvernement.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Démocratie</div>
+          <div class="quiz-opt" data-idx="1">Dictature</div>
+        </div>
+        <div class="quiz-feedback">Le contrôle d'Internet et la censure sont des outils utilisés par les régimes autoritaires pour empêcher les citoyens d'accéder à des informations indépendantes.</div>
+      </div>
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">4</span> Des citoyens manifestent dans la rue contre une réforme du gouvernement sans être arrêtés.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Démocratie</div>
+          <div class="quiz-opt" data-idx="1">Dictature</div>
+        </div>
+        <div class="quiz-feedback">Le droit de manifester est une liberté fondamentale en démocratie. Les citoyens peuvent exprimer leur désaccord publiquement et pacifiquement.</div>
+      </div>
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">5</span> Le même dirigeant est au pouvoir depuis 30 ans et est toujours « réélu » avec 99% des voix.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Démocratie</div>
+          <div class="quiz-opt" data-idx="1">Dictature</div>
+        </div>
+        <div class="quiz-feedback">Des scores électoraux à 99% sont un signe clair d'élections truquées. Dans une vraie démocratie, l'opposition obtient toujours un pourcentage significatif des voix.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="goTo('democratie')">← Module précédent</button>
+    <button class="btn-primary" onclick="goTo('ideologies')">Module suivant : Les idéologies →</button>
+  </div>
+</section>
+
+<!-- ===== SECTION: IDÉOLOGIES ===== -->
+<section class="section" id="ideologies">
+  <div class="section-header">
+    <span class="badge badge-gold">Module 3</span>
+    <h2>Capitalisme & Communisme</h2>
+    <p>Deux visions économiques opposées qui ont façonné le XXe siècle.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card capi">
+      <h3>💰 Capitalisme</h3>
+      <ul>
+        <li>Propriété privée des moyens de production</li>
+        <li>Libre entreprise et concurrence</li>
+        <li>Recherche du profit comme moteur</li>
+        <li>Marché régulé par l'offre et la demande</li>
+        <li>Inégalités de richesse possibles</li>
+        <li>Innovation stimulée par la compétition</li>
+      </ul>
+    </div>
+    <div class="compare-card commu">
+      <h3>☭ Communisme</h3>
+      <ul>
+        <li>Propriété collective des moyens de production</li>
+        <li>Économie planifiée par l'État</li>
+        <li>Égalité économique comme objectif</li>
+        <li>L'État contrôle la production et la distribution</li>
+        <li>Suppression de la propriété privée</li>
+        <li>Idéal d'une société sans classes</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 Nuance essentielle : Communisme ≠ Dictature</div>
+    <div class="card-text">
+      Le communisme est avant tout une <strong>idéologie économique</strong> — une vision de la société. Il peut théoriquement exister dans un cadre démocratique. En Europe, plusieurs pays ont ou ont eu des partis communistes qui participent aux élections démocratiques (le PTB/PVDA en Belgique, par exemple).
+    </div>
+    <div class="info-box gold" style="margin-top:1rem;">
+      <h4>⚠️ La différence cruciale</h4>
+      <p>Ce qui distingue un parti communiste dans une démocratie (comme en Belgique ou en France) du communisme en URSS, en Chine ou en Corée du Nord, c'est le <strong>cadre démocratique</strong>. En démocratie, si un parti communiste est élu et que sa politique ne satisfait pas les citoyens, <strong>le peuple peut voter pour un autre parti aux élections suivantes</strong>. Dans les régimes communistes autoritaires, cette possibilité n'existe pas : le parti unique reste au pouvoir indéfiniment.</p>
+    </div>
+  </div>
+
+  <!-- Spectre politique -->
+  <div class="spectrum-container">
+    <div class="card-title" style="margin-bottom:0.5rem;">📊 Le spectre politique</div>
+    <div class="card-text" style="margin-bottom:1rem;">Les partis politiques se positionnent sur un axe qui va de l'extrême gauche à l'extrême droite. Chaque position correspond à des valeurs et des priorités différentes.</div>
+    <div class="spectrum-bar">
+      <div class="spectrum-marker" style="left:5%" title="Extrême gauche">EG</div>
+      <div class="spectrum-marker" style="left:25%" title="Gauche">G</div>
+      <div class="spectrum-marker" style="left:50%" title="Centre">C</div>
+      <div class="spectrum-marker" style="left:75%" title="Droite">D</div>
+      <div class="spectrum-marker" style="left:95%" title="Extrême droite">ED</div>
+    </div>
+    <div class="spectrum-labels">
+      <span>Extrême gauche</span>
+      <span>Gauche</span>
+      <span>Centre</span>
+      <span>Droite</span>
+      <span>Extrême droite</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-top:1.5rem; font-size:0.82rem;">
+      <div>
+        <strong style="color:var(--accent-red);">Gauche</strong><br>
+        <span style="color:var(--text-secondary);">Priorité à l'égalité sociale, services publics forts, redistribution des richesses, protection des travailleurs.</span>
+      </div>
+      <div>
+        <strong style="color:var(--accent-green);">Centre</strong><br>
+        <span style="color:var(--text-secondary);">Équilibre entre liberté individuelle et solidarité, compromis, politique pragmatique.</span>
+      </div>
+      <div>
+        <strong style="color:var(--accent-blue);">Droite</strong><br>
+        <span style="color:var(--text-secondary);">Priorité à la liberté individuelle, économie de marché, moins d'intervention de l'État, responsabilité personnelle.</span>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:1.5rem;">
+      <h4>🎯 Point crucial sur les extrêmes</h4>
+      <p>En démocratie, les citoyens <strong>peuvent voter pour des partis d'extrême gauche ou d'extrême droite</strong>. C'est un droit fondamental. Si ces partis sont élus et appliquent des politiques très dures, le peuple <strong>conserve le pouvoir de les remplacer</strong> aux élections suivantes. C'est la grande force de la démocratie : même un mauvais choix peut être corrigé pacifiquement.</p>
+    </div>
+  </div>
+
+  <!-- Quiz Idéologies -->
+  <div class="card">
+    <div class="card-title">📝 Quiz : Capitalisme ou communisme ?</div>
+    <div class="quiz-container" id="quizIdeo">
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">1</span> Un entrepreneur crée sa propre entreprise et garde les bénéfices.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Capitalisme</div>
+          <div class="quiz-opt" data-idx="1">Communisme</div>
+        </div>
+        <div class="quiz-feedback">La propriété privée et le droit aux bénéfices sont des caractéristiques fondamentales du capitalisme.</div>
+      </div>
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">2</span> L'État décide combien de voitures seront produites cette année et fixe leur prix.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Capitalisme</div>
+          <div class="quiz-opt" data-idx="1">Communisme</div>
+        </div>
+        <div class="quiz-feedback">L'économie planifiée, où l'État contrôle la production et les prix, est caractéristique du communisme appliqué.</div>
+      </div>
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">3</span> Deux magasins vendent le même produit mais à des prix différents pour attirer les clients.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Capitalisme</div>
+          <div class="quiz-opt" data-idx="1">Communisme</div>
+        </div>
+        <div class="quiz-feedback">La concurrence et la libre fixation des prix par le marché sont des mécanismes capitalistes.</div>
+      </div>
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">4</span> Tous les logements appartiennent à l'État et sont distribués aux citoyens.</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Capitalisme</div>
+          <div class="quiz-opt" data-idx="1">Communisme</div>
+        </div>
+        <div class="quiz-feedback">La suppression de la propriété privée et la distribution par l'État sont des principes communistes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div class="scenario-box">
+    <div class="scenario-title">🎭 Scénario de réflexion</div>
+    <div class="scenario-text">
+      Imagine que tu vis dans un pays démocratique. Lors des élections, un parti communiste remporte la majorité et forme le gouvernement. Ce parti décide de nationaliser les grandes entreprises et d'augmenter fortement les impôts des plus riches. Beaucoup de citoyens ne sont pas d'accord avec ces mesures. Que se passe-t-il ?
+    </div>
+    <div class="scenario-choices" id="scenario1">
+      <div class="scenario-choice" data-idx="0" onclick="chooseScenario('scenario1', 0)">Le parti reste au pouvoir pour toujours car il a gagné les élections</div>
+      <div class="scenario-choice" data-idx="1" onclick="chooseScenario('scenario1', 1)">Les citoyens mécontents peuvent voter pour un autre parti aux prochaines élections</div>
+      <div class="scenario-choice" data-idx="2" onclick="chooseScenario('scenario1', 2)">L'armée intervient pour renverser le gouvernement</div>
+    </div>
+    <div class="scenario-result" id="scenario1-result"></div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="goTo('dictature')">← Module précédent</button>
+    <button class="btn-primary" onclick="goTo('propagande')">Module suivant : La propagande →</button>
+  </div>
+</section>
+
+<!-- ===== SECTION: PROPAGANDE ===== -->
+<section class="section" id="propagande">
+  <div class="section-header">
+    <span class="badge badge-purple">Module 4</span>
+    <h2>La propagande</h2>
+    <p>L'arme invisible qui menace les démocraties de l'intérieur.</p>
+  </div>
+
+  <div class="info-box purple">
+    <h4>📖 Définition</h4>
+    <p>La <strong>propagande</strong> est un ensemble de techniques de communication utilisées pour influencer l'opinion publique, souvent en diffusant des informations orientées, exagérées ou mensongères. Elle vise à manipuler les émotions plutôt qu'à informer objectivement.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🕸️ La propagande à l'ère numérique</div>
+    <div class="card-text">
+      Aujourd'hui, la propagande ne passe plus seulement par les affiches et la télévision d'État. Elle utilise massivement les <strong>réseaux sociaux</strong>, les faux comptes, les deepfakes et les algorithmes. Des États comme la Russie ont été officiellement reconnus par l'Union européenne et les États-Unis comme utilisant ces techniques pour influencer les opinions publiques des démocraties occidentales.
+    </div>
+    <div class="info-box red" style="margin-top:1rem;">
+      <h4>🎯 Les objectifs de la propagande extérieure</h4>
+      <p>Pousser les citoyens à voter pour des partis extrêmes (gauche ou droite) • Diviser la population en l'opposant sur des sujets sensibles (immigration, religion, identité) • Créer un climat de méfiance envers les institutions démocratiques • Affaiblir l'unité nationale et la cohésion européenne • Déstabiliser le pays de l'intérieur sans avoir besoin de guerre militaire.</p>
+    </div>
+  </div>
+
+  <!-- Propaganda techniques -->
+  <div class="card">
+    <div class="card-title">🧰 Les techniques de propagande</div>
+    <div class="card-text" style="margin-bottom:1rem;">Apprends à reconnaître ces techniques utilisées pour manipuler l'opinion :</div>
+    
+    <div style="display:grid; gap:1rem;">
+      <div class="info-box" style="border-left-color: var(--accent-red);">
+        <h4>1. L'appel à la peur</h4>
+        <p>Utiliser des menaces exagérées pour provoquer la peur et pousser les gens à accepter des mesures extrêmes. Ex : « Si vous ne votez pas pour nous, le pays sera envahi. »</p>
+      </div>
+      <div class="info-box" style="border-left-color: var(--accent-gold);">
+        <h4>2. Le bouc émissaire</h4>
+        <p>Désigner un groupe (minorité, pays, parti) comme responsable de tous les problèmes. Ex : « Tous nos malheurs viennent de [tel groupe]. »</p>
+      </div>
+      <div class="info-box" style="border-left-color: var(--accent-purple);">
+        <h4>3. La désinformation</h4>
+        <p>Diffuser de fausses informations qui semblent crédibles pour semer le doute et la confusion. Ex : faux articles, statistiques inventées, images manipulées.</p>
+      </div>
+      <div class="info-box" style="border-left-color: var(--accent-cyan);">
+        <h4>4. L'appel au peuple (populisme)</h4>
+        <p>Prétendre parler au nom du « vrai peuple » contre les « élites corrompues » pour diviser la société. Ex : « Les politiciens sont tous des voleurs, moi seul suis honnête. »</p>
+      </div>
+      <div class="info-box" style="border-left-color: var(--accent-green);">
+        <h4>5. La répétition</h4>
+        <p>Répéter inlassablement le même message jusqu'à ce qu'il soit perçu comme vrai. C'est la base de toute propagande : un mensonge répété mille fois finit par sembler vrai.</p>
+      </div>
+      <div class="info-box" style="border-left-color: var(--accent-red);">
+        <h4>6. Les faux comptes et bots</h4>
+        <p>Créer des milliers de faux profils sur les réseaux sociaux pour amplifier artificiellement un message et créer l'illusion d'un mouvement populaire.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Propaganda detector game -->
+  <div class="card">
+    <div class="card-title">🔍 Jeu : Détecteur de propagande</div>
+    <div class="card-text" style="margin-bottom:1rem;">Lis chaque message et identifie la technique de propagande utilisée. Attention, certains messages sont des informations neutres !</div>
+
+    <div class="prop-game" id="propGame">
+      <!-- Prop 1 -->
+      <div class="prop-card" data-correct="peur">
+        <div class="prop-message">« Si nous n'arrêtons pas immédiatement TOUTE immigration, nos écoles seront submergées, nos hôpitaux s'effondreront et notre culture disparaîtra d'ici 5 ans ! »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="peur" onclick="checkProp(this)">Appel à la peur</button>
+          <button class="prop-btn" data-val="bouc" onclick="checkProp(this)">Bouc émissaire</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+          <button class="prop-btn" data-val="desinfo" onclick="checkProp(this)">Désinformation</button>
+        </div>
+        <div class="prop-explain">Cette phrase utilise l'<strong>appel à la peur</strong> : elle exagère volontairement les conséquences (« s'effondreront », « disparaîtra ») pour provoquer la panique et pousser à des mesures extrêmes. Les termes absolus (« TOUTE », « d'ici 5 ans ») sont des signaux d'alerte.</div>
+      </div>
+
+      <!-- Prop 2 -->
+      <div class="prop-card" data-correct="neutre">
+        <div class="prop-message">« Selon l'Office belge des statistiques, le taux de chômage en Wallonie était de 12,3% au troisième trimestre 2025, en baisse de 0,5 point par rapport à l'année précédente. »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="peur" onclick="checkProp(this)">Appel à la peur</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+          <button class="prop-btn" data-val="desinfo" onclick="checkProp(this)">Désinformation</button>
+          <button class="prop-btn" data-val="populisme" onclick="checkProp(this)">Populisme</button>
+        </div>
+        <div class="prop-explain">C'est une <strong>information neutre et factuelle</strong>. Elle cite une source officielle, donne un chiffre précis et un contexte (évolution). C'est ce type d'information qu'il faut rechercher pour se forger une opinion éclairée.</div>
+      </div>
+
+      <!-- Prop 3 -->
+      <div class="prop-card" data-correct="bouc">
+        <div class="prop-message">« Tous les problèmes de notre pays viennent des étrangers. Sans eux, il n'y aurait ni chômage, ni insécurité, ni dette publique. La solution est simple : fermez les frontières ! »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="peur" onclick="checkProp(this)">Appel à la peur</button>
+          <button class="prop-btn" data-val="bouc" onclick="checkProp(this)">Bouc émissaire</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+          <button class="prop-btn" data-val="repetition" onclick="checkProp(this)">Répétition</button>
+        </div>
+        <div class="prop-explain">C'est la technique du <strong>bouc émissaire</strong> : un groupe entier est désigné comme responsable de TOUS les problèmes. En réalité, le chômage, l'insécurité et la dette ont des causes multiples et complexes. Simplifier à l'extrême est un signe de manipulation.</div>
+      </div>
+
+      <!-- Prop 4 -->
+      <div class="prop-card" data-correct="populisme">
+        <div class="prop-message">« Les élites politiques vivent dans des palais pendant que VOUS, le vrai peuple, vous souffrez ! Moi seul comprends vos problèmes, moi seul peut vous sauver. Les autres sont tous corrompus ! »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="bouc" onclick="checkProp(this)">Bouc émissaire</button>
+          <button class="prop-btn" data-val="populisme" onclick="checkProp(this)">Populisme</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+          <button class="prop-btn" data-val="desinfo" onclick="checkProp(this)">Désinformation</button>
+        </div>
+        <div class="prop-explain">C'est du <strong>populisme</strong> (appel au peuple) : le message oppose « le peuple » aux « élites », se présente comme le seul sauveur (« moi seul ») et discrédite tous les autres. C'est une technique classique des mouvements autoritaires qui cherchent à concentrer le pouvoir.</div>
+      </div>
+
+      <!-- Prop 5 -->
+      <div class="prop-card" data-correct="desinfo">
+        <div class="prop-message">« EXCLUSIF : Un rapport secret prouve que le gouvernement cache un plan pour remplacer 50% de la population d'ici 2030 ! Partagez avant que ce soit censuré !!! »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="peur" onclick="checkProp(this)">Appel à la peur</button>
+          <button class="prop-btn" data-val="desinfo" onclick="checkProp(this)">Désinformation</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+          <button class="prop-btn" data-val="populisme" onclick="checkProp(this)">Populisme</button>
+        </div>
+        <div class="prop-explain">C'est de la <strong>désinformation</strong> pure. Les signaux d'alerte : « EXCLUSIF », « rapport secret », un chiffre sensationnel invérifiable, l'urgence artificielle (« partagez avant censure »), les points d'exclamation. Ce type de message est conçu pour devenir viral et semer le doute dans la population.</div>
+      </div>
+
+      <!-- Prop 6 -->
+      <div class="prop-card" data-correct="desinfo">
+        <div class="prop-message">« D'après une étude de l'Université de Harvard (qui n'existe pas en réalité), 87% des médias traditionnels mentent délibérément au public. Ne faites confiance à personne, sauf à notre chaîne ! »</div>
+        <div class="prop-btns">
+          <button class="prop-btn" data-val="peur" onclick="checkProp(this)">Appel à la peur</button>
+          <button class="prop-btn" data-val="bouc" onclick="checkProp(this)">Bouc émissaire</button>
+          <button class="prop-btn" data-val="desinfo" onclick="checkProp(this)">Désinformation</button>
+          <button class="prop-btn" data-val="neutre" onclick="checkProp(this)">Information neutre</button>
+        </div>
+        <div class="prop-explain">C'est de la <strong>désinformation</strong> : une fausse étude avec un faux chiffre précis (87%) pour sembler crédible. L'objectif est double : détruire la confiance envers les médias fiables ET se positionner comme la seule source de « vérité ». C'est exactement ce que font les régimes autoritaires.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Russia / ingérence -->
+  <div class="card">
+    <div class="card-title">🌐 Focus : L'ingérence russe dans les démocraties</div>
+    <div class="card-text">
+      L'Union européenne et les États-Unis ont officiellement reconnu et documenté les campagnes d'influence menées par la Russie pour déstabiliser les démocraties occidentales. Ces opérations utilisent plusieurs méthodes :
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1rem; margin-top:1rem;">
+      <div style="padding:1rem; background:var(--bg-surface); border-radius:12px;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">🤖</div>
+        <strong style="font-size:0.88rem;">Fermes à trolls</strong>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Des milliers de faux comptes sur les réseaux sociaux pour amplifier les divisions.</p>
+      </div>
+      <div style="padding:1rem; background:var(--bg-surface); border-radius:12px;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">📰</div>
+        <strong style="font-size:0.88rem;">Médias d'État déguisés</strong>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Des chaînes comme RT (Russia Today) présentées comme des médias indépendants.</p>
+      </div>
+      <div style="padding:1rem; background:var(--bg-surface); border-radius:12px;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">🎭</div>
+        <strong style="font-size:0.88rem;">Deepfakes et montages</strong>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Vidéos truquées de politiciens pour discréditer et semer la confusion.</p>
+      </div>
+      <div style="padding:1rem; background:var(--bg-surface); border-radius:12px;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">💣</div>
+        <strong style="font-size:0.88rem;">Polarisation</strong>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Soutien simultané aux extrêmes de gauche ET de droite pour diviser la société.</p>
+      </div>
+    </div>
+
+    <div class="info-box purple" style="margin-top:1.5rem;">
+      <h4>🛡️ Comment se protéger ?</h4>
+      <p><strong>Vérifier les sources</strong> : d'où vient l'information ? Est-elle reprise par plusieurs médias fiables ? <strong>Se méfier des émotions</strong> : si un message te met très en colère ou très en peur, c'est peut-être voulu. <strong>Croiser les informations</strong> : comparer au moins 3 sources différentes. <strong>Développer l'esprit critique</strong> : se poser la question « à qui profite ce message ? »</p>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="goTo('ideologies')">← Module précédent</button>
+    <button class="btn-primary" onclick="goTo('vote')">Module suivant : Simulation de vote →</button>
+  </div>
+</section>
+
+<!-- ===== SECTION: SIMULATION DE VOTE ===== -->
+<section class="section" id="vote">
+  <div class="section-header">
+    <span class="badge badge-green">Module 5</span>
+    <h2>Simulation de vote</h2>
+    <p>Expérimente le processus démocratique en votant pour un parti fictif.</p>
+  </div>
+
+  <div class="vote-sim">
+    <div class="card-title" style="margin-bottom:0.5rem;">🗳️ Élections dans la République de Démocratia</div>
+    <div class="card-text">
+      Bienvenue dans la République de Démocratia ! Six partis fictifs se présentent aux élections. Lis attentivement leurs programmes et choisis celui qui correspond le mieux à tes valeurs. N'oublie pas : <strong>aucun choix n'est mauvais en démocratie</strong>, l'important est de voter de manière éclairée.
+    </div>
+
+    <div class="parties-grid" id="partiesGrid">
+      <div class="party-card" onclick="voteFor(this, 'solidarite')" data-party="solidarite">
+        <div class="party-icon">🤝</div>
+        <div class="party-name">Parti Solidarité</div>
+        <div class="party-desc">Gauche — Services publics forts, redistribution des richesses, droits sociaux élargis.</div>
+      </div>
+      <div class="party-card" onclick="voteFor(this, 'liberte')" data-party="liberte">
+        <div class="party-icon">🦅</div>
+        <div class="party-name">Mouvement Liberté</div>
+        <div class="party-desc">Droite — Moins d'impôts, liberté d'entreprendre, responsabilité individuelle.</div>
+      </div>
+      <div class="party-card" onclick="voteFor(this, 'ecologie')" data-party="ecologie">
+        <div class="party-icon">🌿</div>
+        <div class="party-name">Alliance Verte</div>
+        <div class="party-desc">Centre-gauche — Transition écologique, développement durable, justice climatique.</div>
+      </div>
+      <div class="party-card" onclick="voteFor(this, 'tradition')" data-party="tradition">
+        <div class="party-icon">🏛️</div>
+        <div class="party-name">Parti Tradition</div>
+        <div class="party-desc">Centre-droite — Valeurs traditionnelles, sécurité, identité culturelle, ordre public.</div>
+      </div>
+      <div class="party-card" onclick="voteFor(this, 'peuple')" data-party="peuple">
+        <div class="party-icon">✊</div>
+        <div class="party-name">Front du Peuple</div>
+        <div class="party-desc">Extrême gauche — Nationalisation totale, abolition des grandes fortunes, pouvoir ouvrier.</div>
+      </div>
+      <div class="party-card" onclick="voteFor(this, 'nation')" data-party="nation">
+        <div class="party-icon">🛡️</div>
+        <div class="party-name">Parti National</div>
+        <div class="party-desc">Extrême droite — Fermeture des frontières, priorité nationale absolue, autorité forte.</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:1rem;">
+      <button class="btn-primary" onclick="submitVote()" id="voteBtn" disabled>Confirmer mon vote</button>
+    </div>
+
+    <div class="vote-results" id="voteResults">
+      <h4 style="margin-bottom:1rem; font-family:'Playfair Display',serif;">📊 Résultats de l'élection dans la classe</h4>
+      <div id="resultsContainer"></div>
+
+      <div class="info-box green" style="margin-top:1.5rem;" id="voteConclusion">
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario: 4 ans plus tard -->
+  <div class="scenario-box" id="scenario2Box" style="display:none;">
+    <div class="scenario-title">⏰ Scénario : 4 ans plus tard...</div>
+    <div class="scenario-text" id="scenario2Text"></div>
+    <div class="scenario-choices" id="scenario2">
+      <div class="scenario-choice" data-idx="0" onclick="chooseScenario('scenario2', 0)">Voter pour le même parti car il a tenu ses promesses</div>
+      <div class="scenario-choice" data-idx="1" onclick="chooseScenario('scenario2', 1)">Voter pour un autre parti car je ne suis pas satisfait(e)</div>
+      <div class="scenario-choice" data-idx="2" onclick="chooseScenario('scenario2', 2)">Ne pas voter en signe de protestation</div>
+    </div>
+    <div class="scenario-result" id="scenario2-result"></div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn-secondary" onclick="goTo('propagande')">← Module précédent</button>
+    <button class="btn-primary" onclick="goTo('bilan')">Module final : Bilan →</button>
+  </div>
+</section>
+
+<!-- ===== SECTION: BILAN ===== -->
+<section class="section" id="bilan">
+  <div class="section-header">
+    <span class="badge badge-cyan" style="background:rgba(6,182,212,0.12); color:var(--accent-cyan);">Module final</span>
+    <h2>Bilan & Synthèse</h2>
+    <p>Vérifie tout ce que tu as appris à travers cette exploration.</p>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <div class="card-title">📅 Quelques repères historiques</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">~500 av. J.-C.</div>
+        <div class="tl-title">Athènes : naissance de la démocratie</div>
+        <div class="tl-text">Les citoyens athéniens votent directement les lois. C'est la première démocratie directe connue, bien qu'exclue les femmes, les esclaves et les étrangers.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1789</div>
+        <div class="tl-title">Révolution française</div>
+        <div class="tl-text">Déclaration des Droits de l'Homme et du Citoyen. Les idées de liberté, égalité et fraternité se répandent en Europe.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1831</div>
+        <div class="tl-title">La Belgique devient indépendante</div>
+        <div class="tl-text">Adoption d'une Constitution qui est l'une des plus libérales d'Europe. Monarchie constitutionnelle parlementaire.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1917</div>
+        <div class="tl-title">Révolution russe</div>
+        <div class="tl-text">Le communisme arrive au pouvoir en Russie. Naissance de l'URSS. L'idéal d'égalité se transforme rapidement en dictature.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1933-1945</div>
+        <div class="tl-title">Le nazisme en Allemagne</div>
+        <div class="tl-text">Hitler arrive au pouvoir par les urnes, puis transforme la démocratie en dictature. La propagande joue un rôle central. Cet exemple montre la fragilité de la démocratie.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1948</div>
+        <div class="tl-title">Déclaration universelle des droits de l'homme</div>
+        <div class="tl-text">L'ONU adopte ce texte fondateur qui reconnaît les droits et libertés fondamentaux de tous les êtres humains.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1989</div>
+        <div class="tl-title">Chute du mur de Berlin</div>
+        <div class="tl-text">Fin symbolique du communisme en Europe de l'Est. Les peuples choisissent la démocratie et l'économie de marché.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2016-aujourd'hui</div>
+        <div class="tl-title">Ère de la désinformation numérique</div>
+        <div class="tl-text">Les réseaux sociaux deviennent des outils de manipulation. Ingérences étrangères documentées dans les élections de plusieurs démocraties.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau de synthèse -->
+  <div class="card">
+    <div class="card-title">📋 Tableau de synthèse</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:separate; border-spacing:0; font-size:0.85rem; margin-top:1rem;">
+        <thead>
+          <tr style="text-align:left;">
+            <th style="padding:12px 16px; background:var(--bg-surface); border-radius:10px 0 0 0; color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Critère</th>
+            <th style="padding:12px 16px; background:var(--bg-surface); color:var(--accent-blue);">Démocratie</th>
+            <th style="padding:12px 16px; background:var(--bg-surface); color:var(--accent-red);">Dictature</th>
+            <th style="padding:12px 16px; background:var(--bg-surface); color:var(--accent-green);">Capitalisme</th>
+            <th style="padding:12px 16px; background:var(--bg-surface); border-radius:0 10px 0 0; color:var(--accent-gold);">Communisme</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:10px 16px; border-bottom:1px solid var(--border); font-weight:600;">Nature</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Système politique</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Système politique</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Système économique</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Système économique</td></tr>
+          <tr><td style="padding:10px 16px; border-bottom:1px solid var(--border); font-weight:600;">Pouvoir</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Au peuple</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">À un individu/groupe</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Au marché</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">À l'État</td></tr>
+          <tr><td style="padding:10px 16px; border-bottom:1px solid var(--border); font-weight:600;">Propriété</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">—</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">—</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Privée</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Collective</td></tr>
+          <tr><td style="padding:10px 16px; border-bottom:1px solid var(--border); font-weight:600;">Libertés</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Garanties</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Limitées/Absentes</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Économiques</td><td style="padding:10px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Limitées</td></tr>
+          <tr><td style="padding:10px 16px; font-weight:600;">Changement</td><td style="padding:10px 16px; color:var(--text-secondary);">Par les élections</td><td style="padding:10px 16px; color:var(--text-secondary);">Par la force</td><td style="padding:10px 16px; color:var(--text-secondary);">Par le marché</td><td style="padding:10px 16px; color:var(--text-secondary);">Par révolution</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Quiz final -->
+  <div class="card">
+    <div class="card-title">🏆 Quiz final : Teste tes connaissances</div>
+    <div class="quiz-container" id="quizFinal">
+      <div class="quiz-question" data-correct="2">
+        <div class="quiz-q-text"><span class="quiz-q-num">1</span> Quelle est la principale différence entre le communisme en Belgique et le communisme en Corée du Nord ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Il n'y a aucune différence</div>
+          <div class="quiz-opt" data-idx="1">Le communisme belge est moins extrême dans ses idées</div>
+          <div class="quiz-opt" data-idx="2">En Belgique, le cadre démocratique permet de changer de parti au pouvoir</div>
+          <div class="quiz-opt" data-idx="3">La Corée du Nord n'est pas communiste</div>
+        </div>
+        <div class="quiz-feedback">La différence fondamentale est le <strong>cadre démocratique</strong>. En Belgique, si un parti communiste était élu, les citoyens pourraient voter pour un autre parti aux élections suivantes. En Corée du Nord, cette possibilité n'existe pas.</div>
+      </div>
+
+      <div class="quiz-question" data-correct="1">
+        <div class="quiz-q-text"><span class="quiz-q-num">2</span> La propagande est dangereuse pour les démocraties parce que...</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Elle est interdite</div>
+          <div class="quiz-opt" data-idx="1">Elle manipule les citoyens pour fausser leur vote et diviser la société</div>
+          <div class="quiz-opt" data-idx="2">Elle est toujours facile à repérer</div>
+          <div class="quiz-opt" data-idx="3">Elle ne touche que les réseaux sociaux</div>
+        </div>
+        <div class="quiz-feedback">La propagande est une menace pour la démocratie car elle fausse le choix éclairé des citoyens. Si les votes sont basés sur des mensonges et la manipulation des émotions, la démocratie ne fonctionne plus correctement.</div>
+      </div>
+
+      <div class="quiz-question" data-correct="3">
+        <div class="quiz-q-text"><span class="quiz-q-num">3</span> Comment la Russie utilise-t-elle la propagande contre les démocraties occidentales ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">En envoyant des soldats</div>
+          <div class="quiz-opt" data-idx="1">En bloquant Internet dans ces pays</div>
+          <div class="quiz-opt" data-idx="2">En organisant des manifestations</div>
+          <div class="quiz-opt" data-idx="3">En utilisant les réseaux sociaux pour diviser les populations et pousser aux extrêmes</div>
+        </div>
+        <div class="quiz-feedback">La Russie utilise des campagnes de désinformation en ligne, des faux comptes, et soutient simultanément les mouvements extrêmes de gauche et de droite pour affaiblir la cohésion des démocraties.</div>
+      </div>
+
+      <div class="quiz-question" data-correct="0">
+        <div class="quiz-q-text"><span class="quiz-q-num">4</span> Un citoyen voit un message viral sur les réseaux sociaux affirmant que le gouvernement prépare un « plan secret ». Que devrait-il faire ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Vérifier la source, croiser avec d'autres médias fiables, et se méfier des émotions suscitées</div>
+          <div class="quiz-opt" data-idx="1">Le partager immédiatement pour alerter ses amis</div>
+          <div class="quiz-opt" data-idx="2">L'ignorer complètement sans réfléchir</div>
+          <div class="quiz-opt" data-idx="3">Croire le message car il a beaucoup de partages</div>
+        </div>
+        <div class="quiz-feedback">L'esprit critique est la meilleure arme contre la propagande : vérifier la source, croiser les informations avec des médias fiables, et se demander « à qui profite ce message ? »</div>
+      </div>
+
+      <div class="quiz-question" data-correct="2">
+        <div class="quiz-q-text"><span class="quiz-q-num">5</span> En démocratie, est-il possible de voter pour un parti d'extrême droite ou d'extrême gauche ?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" data-idx="0">Non, les partis extrêmes sont toujours interdits</div>
+          <div class="quiz-opt" data-idx="1">Oui, mais c'est illégal</div>
+          <div class="quiz-opt" data-idx="2">Oui, c'est un droit fondamental, et le peuple pourra changer de direction aux élections suivantes</div>
+          <div class="quiz-opt" data-idx="3">Seulement si le roi l'autorise</div>
+        </div>
+        <div class="quiz-feedback">C'est la force de la démocratie : le peuple est libre de ses choix. Et s'il n'est pas satisfait d'un gouvernement extrême, il peut pacifiquement élire un autre parti. C'est ce qui distingue la démocratie de la dictature.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score final -->
+  <div class="card" id="finalScoreCard" style="display:none; text-align:center; border: 1px solid rgba(6,182,212,0.3);">
+    <div style="font-size:3rem; margin-bottom:0.5rem;">🎓</div>
+    <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; margin-bottom:0.5rem;">Félicitations !</div>
+    <div id="finalScoreText" style="color:var(--text-secondary); font-size:1.05rem; line-height:1.7;"></div>
+    <div style="margin-top:1.5rem;">
+      <button class="btn-primary" onclick="resetAll()">🔄 Recommencer</button>
+    </div>
+  </div>
+
+  <div class="card" style="border-left: 3px solid var(--accent-cyan); margin-top:2rem;">
+    <div class="card-title">💬 Mot de la fin</div>
+    <div class="card-text">
+      La démocratie n'est pas parfaite — aucun système ne l'est. Mais elle reste le seul système qui donne au peuple le pouvoir de corriger ses erreurs pacifiquement. Être un citoyen éclairé, c'est comprendre les enjeux, reconnaître la propagande, et exercer son droit de vote de manière réfléchie. La démocratie est fragile : elle a besoin de citoyens informés et engagés pour survivre. C'est maintenant votre responsabilité.
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+// ===== STATE =====
+let score = 0;
+let correctCount = 0;
+let totalAnswered = 0;
+let answeredQuestions = new Set();
+let selectedVote = null;
+let allVotes = {};
+const sectionOrder = ['intro','democratie','dictature','ideologies','propagande','vote','bilan'];
+let visitedSections = new Set(['intro']);
+
+// ===== NAVIGATION =====
+function goTo(sectionId) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.section === sectionId);
+  });
+  visitedSections.add(sectionId);
+  updateProgress();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => goTo(tab.dataset.section));
+});
+
+function toggleMobileNav() {
+  const tabs = document.getElementById('navTabs');
+  tabs.style.display = tabs.style.display === 'flex' ? 'none' : 'flex';
+  tabs.style.position = 'absolute';
+  tabs.style.top = '64px';
+  tabs.style.left = '0';
+  tabs.style.right = '0';
+  tabs.style.background = 'rgba(10,14,26,0.98)';
+  tabs.style.flexDirection = 'column';
+  tabs.style.padding = '1rem';
+  tabs.style.zIndex = '200';
+}
+
+function updateProgress() {
+  const pct = Math.round((visitedSections.size / sectionOrder.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '%';
+}
+
+// ===== SCORE =====
+function addScore(pts) {
+  score += pts;
+  document.getElementById('scoreVal').textContent = score;
+}
+
+function updateCorrect() {
+  document.getElementById('correctVal').textContent = correctCount;
+  document.getElementById('totalVal').textContent = totalAnswered;
+}
+
+// ===== QUIZ ENGINE =====
+document.querySelectorAll('.quiz-question').forEach(q => {
+  q.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const qId = q.parentElement.id + '-' + Array.from(q.parentElement.children).indexOf(q);
+      if (answeredQuestions.has(qId)) return;
+      answeredQuestions.add(qId);
+
+      const correctIdx = parseInt(q.dataset.correct);
+      const clickedIdx = parseInt(this.dataset.idx);
+      const feedback = q.querySelector('.quiz-feedback');
+      
+      totalAnswered++;
+      
+      if (clickedIdx === correctIdx) {
+        this.classList.add('correct');
+        feedback.classList.add('show', 'correct-fb');
+        correctCount++;
+        addScore(10);
+      } else {
+        this.classList.add('wrong');
+        q.querySelectorAll('.quiz-opt')[correctIdx].classList.add('correct');
+        feedback.classList.add('show', 'wrong-fb');
+      }
+      updateCorrect();
+    });
+  });
+});
+
+// ===== DRAG AND DROP =====
+let dragItem = null;
+document.querySelectorAll('.sortable-item').forEach(item => {
+  item.addEventListener('dragstart', function(e) {
+    dragItem = this;
+    setTimeout(() => this.style.opacity = '0.4', 0);
+  });
+  item.addEventListener('dragend', function() {
+    this.style.opacity = '1';
+    document.querySelectorAll('.sortable-item').forEach(i => i.classList.remove('drag-over'));
+  });
+  item.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('drag-over');
+  });
+  item.addEventListener('dragleave', function() {
+    this.classList.remove('drag-over');
+  });
+  item.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    if (dragItem !== this) {
+      const list = this.parentNode;
+      const items = Array.from(list.children);
+      const fromIdx = items.indexOf(dragItem);
+      const toIdx = items.indexOf(this);
+      if (fromIdx < toIdx) {
+        list.insertBefore(dragItem, this.nextSibling);
+      } else {
+        list.insertBefore(dragItem, this);
+      }
+    }
+  });
+});
+
+// ===== PROPAGANDA GAME =====
+function checkProp(btn) {
+  const card = btn.closest('.prop-card');
+  if (card.dataset.answered) return;
+  card.dataset.answered = 'true';
+
+  const correct = card.dataset.correct;
+  const clicked = btn.dataset.val;
+  const explain = card.querySelector('.prop-explain');
+
+  totalAnswered++;
+
+  if (clicked === correct) {
+    btn.classList.add('correct-ans');
+    correctCount++;
+    addScore(15);
+  } else {
+    btn.classList.add('wrong-ans');
+    card.querySelectorAll('.prop-btn').forEach(b => {
+      if (b.dataset.val === correct) b.classList.add('correct-ans');
+    });
+  }
+  explain.classList.add('show');
+  updateCorrect();
+}
+
+// ===== VOTE SIMULATION =====
+function voteFor(card, party) {
+  document.querySelectorAll('.party-card').forEach(c => c.classList.remove('voted'));
+  card.classList.add('voted');
+  selectedVote = party;
+  document.getElementById('voteBtn').disabled = false;
+}
+
+function submitVote() {
+  if (!selectedVote) return;
+  
+  // Simulate class votes (random distribution + user's vote)
+  const parties = {
+    solidarite: { name: 'Parti Solidarité', color: '#ef4444', votes: Math.floor(Math.random()*8)+2 },
+    liberte: { name: 'Mouvement Liberté', color: '#3b82f6', votes: Math.floor(Math.random()*8)+2 },
+    ecologie: { name: 'Alliance Verte', color: '#10b981', votes: Math.floor(Math.random()*6)+1 },
+    tradition: { name: 'Parti Tradition', color: '#f59e0b', votes: Math.floor(Math.random()*6)+1 },
+    peuple: { name: 'Front du Peuple', color: '#8b5cf6', votes: Math.floor(Math.random()*4)+1 },
+    nation: { name: 'Parti National', color: '#f97316', votes: Math.floor(Math.random()*4)+1 }
+  };
+  parties[selectedVote].votes += 1;
+
+  const totalVotes = Object.values(parties).reduce((s, p) => s + p.votes, 0);
+  const container = document.getElementById('resultsContainer');
+  container.innerHTML = '';
+
+  // Sort by votes
+  const sorted = Object.entries(parties).sort((a,b) => b[1].votes - a[1].votes);
+  const winner = sorted[0];
+
+  sorted.forEach(([key, p]) => {
+    const pct = Math.round((p.votes / totalVotes) * 100);
+    container.innerHTML += `
+      <div class="result-bar-container">
+        <div class="result-bar-label">
+          <span>${p.name} ${key === selectedVote ? '(ton vote)' : ''}</span>
+          <span style="color:var(--text-muted)">${pct}%</span>
+        </div>
+        <div class="result-bar">
+          <div class="result-bar-fill" style="width:${pct}%; background:${p.color};"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('voteConclusion').innerHTML = `
+    <h4>🏆 Résultat</h4>
+    <p>Le <strong>${winner[1].name}</strong> remporte les élections avec ${Math.round((winner[1].votes/totalVotes)*100)}% des voix. 
+    ${winner[0] === 'peuple' || winner[0] === 'nation' ? 
+      "Un parti extrême a été élu. En démocratie, c'est le choix du peuple. La question essentielle : <strong>les citoyens pourront-ils voter pour un autre parti dans 4 ans ?</strong> Si oui, c'est une démocratie. Si non, c'est une dictature." :
+      "Le peuple a fait son choix démocratiquement. Aux prochaines élections, il pourra confirmer ou changer de direction."
+    }</p>
+  `;
+
+  document.getElementById('voteResults').classList.add('show');
+  document.getElementById('voteBtn').disabled = true;
+  addScore(20);
+
+  // Show scenario 2
+  const s2 = document.getElementById('scenario2Box');
+  s2.style.display = 'block';
+  document.getElementById('scenario2Text').textContent = 
+    `Le ${winner[1].name} gouverne depuis 4 ans. Certaines mesures ont fonctionné, d'autres ont déçu. Les prochaines élections approchent. Que fais-tu ?`;
+  
+  allVotes = parties;
+}
+
+// ===== SCENARIOS =====
+const scenarioAnswers = {
+  scenario1: {
+    correct: 1,
+    responses: [
+      "Non ! En démocratie, aucun parti ne reste au pouvoir « pour toujours ». Les élections régulières garantissent que le peuple peut toujours exprimer un nouveau choix.",
+      "Exactement ! C'est la force fondamentale de la démocratie. Le pouvoir de changement pacifique par les urnes. Même si un parti communiste, socialiste ou libéral est élu, les citoyens conservent le pouvoir de changer de direction.",
+      "Non ! Un coup d'État est l'opposé de la démocratie. En démocratie, c'est par le vote — et uniquement par le vote — que le changement de pouvoir s'opère."
+    ]
+  },
+  scenario2: {
+    correct: -1, // all valid
+    responses: [
+      "C'est tout à fait ton droit ! En démocratie, la fidélité à un parti est un choix respectable. Tu as évalué le bilan et tu es satisfait(e).",
+      "C'est aussi ton droit ! C'est exactement ce mécanisme qui fait la force de la démocratie : la possibilité de sanctionner un gouvernement qui déçoit et de donner sa chance à un autre projet.",
+      "C'est un choix, mais attention : ne pas voter, c'est laisser les autres décider pour toi. L'abstention affaiblit la démocratie car elle réduit la représentativité du résultat. Chaque voix compte !"
+    ]
+  }
+};
+
+function chooseScenario(id, idx) {
+  const container = document.getElementById(id);
+  if (container.dataset.answered) return;
+  container.dataset.answered = 'true';
+
+  container.querySelectorAll('.scenario-choice').forEach((c, i) => {
+    if (i === idx) c.classList.add('chosen');
+  });
+
+  const result = document.getElementById(id + '-result');
+  const data = scenarioAnswers[id];
+  
+  if (data.correct === -1 || idx === data.correct) {
+    addScore(10);
+    correctCount++;
+  }
+  totalAnswered++;
+  updateCorrect();
+
+  result.innerHTML = data.responses[idx];
+  result.classList.add('show');
+}
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#3b82f6','#06b6d4','#10b981','#f59e0b','#ef4444','#8b5cf6'];
+  for (let i = 0; i < 50; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.top = '-10px';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.width = (Math.random() * 8 + 5) + 'px';
+    c.style.height = (Math.random() * 8 + 5) + 'px';
+    c.style.animationDelay = (Math.random() * 1) + 's';
+    c.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+// Check if all quizzes completed for final section
+const observer = new MutationObserver(() => {
+  const bilanSection = document.getElementById('bilan');
+  if (bilanSection.classList.contains('active')) {
+    const finalQuiz = document.getElementById('quizFinal');
+    const qs = finalQuiz.querySelectorAll('.quiz-question');
+    const answered = Array.from(qs).filter(q => {
+      const qId = 'quizFinal-' + Array.from(finalQuiz.children).indexOf(q);
+      return answeredQuestions.has(qId);
+    });
+    if (answered.length === qs.length) {
+      showFinalScore();
+    }
+  }
+});
+
+// Watch for quiz answers in bilan
+document.getElementById('quizFinal').addEventListener('click', function() {
+  setTimeout(() => {
+    const qs = this.querySelectorAll('.quiz-question');
+    let all = true;
+    qs.forEach((q, i) => {
+      const qId = 'quizFinal-' + i;
+      if (!answeredQuestions.has(qId)) all = false;
+    });
+    if (all) showFinalScore();
+  }, 300);
+});
+
+function showFinalScore() {
+  const card = document.getElementById('finalScoreCard');
+  if (card.style.display === 'block') return;
+  card.style.display = 'block';
+  
+  const pct = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+  let msg = '';
+  if (pct >= 80) msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. Excellent ! Tu as une très bonne compréhension des systèmes politiques. Tu es un citoyen éclairé !`;
+  else if (pct >= 60) msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. Bon travail ! Tu as une bonne base de compréhension. Continue à t'informer !`;
+  else msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. C'est un début ! N'hésite pas à relire les modules et à refaire les activités pour mieux comprendre ces concepts essentiels.`;
+  
+  document.getElementById('finalScoreText').innerHTML = msg;
+  launchConfetti();
+  card.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetAll() {
+  score = 0; correctCount = 0; totalAnswered = 0;
+  answeredQuestions.clear();
+  selectedVote = null;
+  visitedSections = new Set(['intro']);
+  
+  document.getElementById('scoreVal').textContent = '0';
+  document.getElementById('correctVal').textContent = '0';
+  document.getElementById('totalVal').textContent = '0';
+  document.getElementById('finalScoreCard').style.display = 'none';
+  document.getElementById('voteResults').classList.remove('show');
+  document.getElementById('voteBtn').disabled = true;
+  document.getElementById('scenario2Box').style.display = 'none';
+  
+  // Reset quizzes
+  document.querySelectorAll('.quiz-opt').forEach(o => {
+    o.classList.remove('correct','wrong','selected');
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(f => {
+    f.classList.remove('show','correct-fb','wrong-fb');
+  });
+  document.querySelectorAll('.prop-card').forEach(c => {
+    delete c.dataset.answered;
+  });
+  document.querySelectorAll('.prop-btn').forEach(b => {
+    b.classList.remove('correct-ans','wrong-ans');
+  });
+  document.querySelectorAll('.prop-explain').forEach(e => {
+    e.classList.remove('show');
+  });
+  document.querySelectorAll('.party-card').forEach(c => c.classList.remove('voted'));
+  document.querySelectorAll('.scenario-choice').forEach(c => c.classList.remove('chosen'));
+  document.querySelectorAll('.scenario-result').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('[data-answered]').forEach(el => delete el.dataset.answered);
+  
+  updateProgress();
+  goTo('intro');
+}
+
+// Init
+updateProgress();
+</script>
+</body>
+</html>

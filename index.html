@@ -48,6 +48,104 @@ body::before {
   pointer-events: none;
 }
 
+/* ===== NAME OVERLAY ===== */
+.name-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,14,26,0.97);
+  backdrop-filter: blur(30px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.5s ease;
+}
+.name-overlay.hidden { display: none; }
+
+.name-modal {
+  background: var(--bg-card);
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  max-width: 460px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(6,182,212,0.08);
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(40px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.name-modal-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.name-modal h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #e2e8f0 30%, var(--accent-cyan) 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.name-modal p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.name-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+.name-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(6,182,212,0.15);
+}
+.name-input::placeholder { color: var(--text-muted); }
+
+.name-submit {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 36px;
+  border-radius: 12px;
+  font-size: 1rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: white; border: none; cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.name-submit.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+.name-submit.enabled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(59,130,246,0.4);
+}
+
+.name-error {
+  color: var(--accent-red);
+  font-size: 0.82rem;
+  margin-bottom: 0.8rem;
+  min-height: 1.2em;
+}
+
 /* ===== NAVIGATION ===== */
 .nav-bar {
   position: fixed; top:0; left:0; right:0; z-index:100;
@@ -88,6 +186,15 @@ body::before {
   background: rgba(6,182,212,0.08);
   border-color: rgba(6,182,212,0.2);
 }
+.nav-tab .tab-check {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 0.7rem;
+  color: var(--accent-green);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.nav-tab .tab-check.done { opacity: 1; }
 
 .nav-progress {
   display: flex; align-items: center; gap: 8px;
@@ -155,6 +262,13 @@ body::before {
   color: var(--text-secondary);
   max-width: 650px; margin: 0 auto 2.5rem;
   line-height: 1.7;
+}
+
+.hero-welcome {
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .hero-start {
@@ -622,6 +736,14 @@ body::before {
   color: var(--accent-gold);
 }
 
+/* Module timer in score panel */
+.timer-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  font-size: 0.82rem;
+}
+
 /* ===== BUTTONS ===== */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
@@ -726,7 +848,7 @@ body::before {
   .hero h1 { font-size: 2rem; }
   .compare-grid { grid-template-columns: 1fr; }
   .parties-grid { grid-template-columns: repeat(2, 1fr); }
-  .score-panel { bottom: 10px; right: 10px; left: 10px; justify-content: center; }
+  .score-panel { bottom: 10px; right: 10px; left: 10px; justify-content: center; flex-wrap: wrap; }
 }
 
 /* Mobile nav toggle */
@@ -824,21 +946,92 @@ body::before {
   color: var(--accent-cyan);
   font-size: 1.3rem;
 }
+
+/* ===== FINAL RECAP TABLE ===== */
+.recap-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+  margin: 1.5rem 0;
+}
+.recap-table th {
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+.recap-table th:first-child { border-radius: 10px 0 0 0; }
+.recap-table th:last-child { border-radius: 0 10px 0 0; }
+.recap-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.recap-table tr:last-child td {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+.recap-pct-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.recap-pct-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* ===== SEND STATUS ===== */
+.send-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.send-status.show { opacity: 1; }
+.send-status.success { background: rgba(16,185,129,0.1); color: var(--accent-green); }
+.send-status.error { background: rgba(239,68,68,0.1); color: var(--accent-red); }
+.send-status.sending { background: rgba(59,130,246,0.1); color: var(--accent-blue); }
 </style>
 </head>
 <body>
+
+<!-- NAME OVERLAY -->
+<div class="name-overlay" id="nameOverlay">
+  <div class="name-modal">
+    <span class="name-modal-icon">🏛️</span>
+    <h2>Bienvenue sur DémocratieLab</h2>
+    <p>Avant de commencer, entre ton prénom pour que ton professeur puisse suivre ta progression.</p>
+    <div class="name-error" id="nameError"></div>
+    <input type="text" class="name-input" id="studentNameInput" placeholder="Ton prénom…" maxlength="30" autocomplete="off" autofocus>
+    <br>
+    <button class="name-submit" id="nameSubmitBtn" onclick="submitName()">C'est parti ! →</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="nav-bar">
   <div class="nav-logo">DémocratieLab</div>
   <div class="nav-tabs" id="navTabs">
-    <div class="nav-tab active" data-section="intro">Accueil</div>
-    <div class="nav-tab" data-section="democratie">Démocratie</div>
-    <div class="nav-tab" data-section="dictature">Dictature</div>
-    <div class="nav-tab" data-section="ideologies">Idéologies</div>
-    <div class="nav-tab" data-section="propagande">Propagande</div>
-    <div class="nav-tab" data-section="vote">Simulation</div>
-    <div class="nav-tab" data-section="bilan">Bilan</div>
+    <div class="nav-tab active" data-section="intro">Accueil <span class="tab-check" id="check-intro">✓</span></div>
+    <div class="nav-tab" data-section="democratie">Démocratie <span class="tab-check" id="check-democratie">✓</span></div>
+    <div class="nav-tab" data-section="dictature">Dictature <span class="tab-check" id="check-dictature">✓</span></div>
+    <div class="nav-tab" data-section="ideologies">Idéologies <span class="tab-check" id="check-ideologies">✓</span></div>
+    <div class="nav-tab" data-section="propagande">Propagande <span class="tab-check" id="check-propagande">✓</span></div>
+    <div class="nav-tab" data-section="vote">Simulation <span class="tab-check" id="check-vote">✓</span></div>
+    <div class="nav-tab" data-section="bilan">Bilan <span class="tab-check" id="check-bilan">✓</span></div>
   </div>
   <div class="nav-progress">
     <div class="nav-progress-bar"><div class="nav-progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -851,6 +1044,7 @@ body::before {
 <div class="score-panel">
   <div class="score-item">⚡ <span class="score-val" id="scoreVal">0</span> pts</div>
   <div class="score-item">✓ <span class="score-val" id="correctVal">0</span> / <span id="totalVal">0</span></div>
+  <div class="score-item">⏱️ <span class="timer-display" id="timerDisplay">00:00</span></div>
 </div>
 
 <!-- ===== SECTION: INTRO ===== -->
@@ -859,6 +1053,7 @@ body::before {
   <div class="hero">
     <div class="hero-badge">UAA6 — Le citoyen et l'État</div>
     <h1>Comprendre les systèmes<br>politiques</h1>
+    <div class="hero-welcome" id="heroWelcome"></div>
     <p class="hero-sub">
       Démocratie, dictature, propagande, capitalisme, communisme… 
       Ces mots sont partout dans l'actualité. Mais que signifient-ils vraiment ? 
@@ -942,7 +1137,6 @@ body::before {
   <div class="card">
     <div class="card-title">📝 Quiz : Vérifie ta compréhension</div>
     <div class="quiz-container" id="quizDemo">
-      <!-- Q1 -->
       <div class="quiz-question" data-correct="1">
         <div class="quiz-q-text"><span class="quiz-q-num">1</span> Que signifie le mot « démocratie » étymologiquement ?</div>
         <div class="quiz-options">
@@ -953,7 +1147,6 @@ body::before {
         </div>
         <div class="quiz-feedback">Du grec <em>demos</em> (peuple) et <em>kratos</em> (pouvoir). La démocratie est littéralement le « pouvoir du peuple ».</div>
       </div>
-      <!-- Q2 -->
       <div class="quiz-question" data-correct="2">
         <div class="quiz-q-text"><span class="quiz-q-num">2</span> Qu'est-ce qui caractérise la démocratie représentative ?</div>
         <div class="quiz-options">
@@ -964,7 +1157,6 @@ body::before {
         </div>
         <div class="quiz-feedback">Dans une démocratie représentative, les citoyens élisent des parlementaires, des députés et des dirigeants qui prennent les décisions politiques en leur nom.</div>
       </div>
-      <!-- Q3 -->
       <div class="quiz-question" data-correct="0">
         <div class="quiz-q-text"><span class="quiz-q-num">3</span> Si un parti au pouvoir déçoit les citoyens, que peuvent-ils faire en démocratie ?</div>
         <div class="quiz-options">
@@ -975,7 +1167,6 @@ body::before {
         </div>
         <div class="quiz-feedback">C'est la force de la démocratie : la possibilité de changement pacifique par le vote. Le peuple a toujours le dernier mot, via les élections.</div>
       </div>
-      <!-- Q4 -->
       <div class="quiz-question" data-correct="1">
         <div class="quiz-q-text"><span class="quiz-q-num">4</span> En Belgique, combien de députés siègent à la Chambre des Représentants ?</div>
         <div class="quiz-options">
@@ -1007,7 +1198,6 @@ body::before {
     <p>Une <strong>dictature</strong> est un régime politique dans lequel le pouvoir est exercé par une seule personne ou un petit groupe, sans contrôle démocratique ni respect des libertés individuelles. Il n'y a pas de véritables élections libres, pas de liberté de la presse, et l'opposition est réprimée.</p>
   </div>
 
-  <!-- Comparaison visuelle -->
   <div class="compare-grid">
     <div class="compare-card demo">
       <h3>🏛️ Démocratie</h3>
@@ -1037,7 +1227,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Activity: Corée du Nord -->
   <div class="card">
     <div class="card-title">🌍 Focus : La Corée du Nord</div>
     <div class="card-text">
@@ -1048,7 +1237,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Quiz dictature -->
   <div class="card">
     <div class="card-title">📝 Quiz : Démocratie ou dictature ?</div>
     <div class="card-text" style="margin-bottom:1rem;">Pour chaque situation, détermine s'il s'agit d'une caractéristique de la démocratie ou de la dictature.</div>
@@ -1146,7 +1334,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Spectre politique -->
   <div class="spectrum-container">
     <div class="card-title" style="margin-bottom:0.5rem;">📊 Le spectre politique</div>
     <div class="card-text" style="margin-bottom:1rem;">Les partis politiques se positionnent sur un axe qui va de l'extrême gauche à l'extrême droite. Chaque position correspond à des valeurs et des priorités différentes.</div>
@@ -1164,7 +1351,6 @@ body::before {
       <span>Droite</span>
       <span>Extrême droite</span>
     </div>
-
     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-top:1.5rem; font-size:0.82rem;">
       <div>
         <strong style="color:var(--accent-red);">Gauche</strong><br>
@@ -1179,14 +1365,12 @@ body::before {
         <span style="color:var(--text-secondary);">Priorité à la liberté individuelle, économie de marché, moins d'intervention de l'État, responsabilité personnelle.</span>
       </div>
     </div>
-
     <div class="info-box" style="margin-top:1.5rem;">
       <h4>🎯 Point crucial sur les extrêmes</h4>
       <p>En démocratie, les citoyens <strong>peuvent voter pour des partis d'extrême gauche ou d'extrême droite</strong>. C'est un droit fondamental. Si ces partis sont élus et appliquent des politiques très dures, le peuple <strong>conserve le pouvoir de les remplacer</strong> aux élections suivantes. C'est la grande force de la démocratie : même un mauvais choix peut être corrigé pacifiquement.</p>
     </div>
   </div>
 
-  <!-- Quiz Idéologies -->
   <div class="card">
     <div class="card-title">📝 Quiz : Capitalisme ou communisme ?</div>
     <div class="quiz-container" id="quizIdeo">
@@ -1225,7 +1409,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Scenario -->
   <div class="scenario-box">
     <div class="scenario-title">🎭 Scénario de réflexion</div>
     <div class="scenario-text">
@@ -1269,11 +1452,9 @@ body::before {
     </div>
   </div>
 
-  <!-- Propaganda techniques -->
   <div class="card">
     <div class="card-title">🧰 Les techniques de propagande</div>
     <div class="card-text" style="margin-bottom:1rem;">Apprends à reconnaître ces techniques utilisées pour manipuler l'opinion :</div>
-    
     <div style="display:grid; gap:1rem;">
       <div class="info-box" style="border-left-color: var(--accent-red);">
         <h4>1. L'appel à la peur</h4>
@@ -1302,13 +1483,11 @@ body::before {
     </div>
   </div>
 
-  <!-- Propaganda detector game -->
   <div class="card">
     <div class="card-title">🔍 Jeu : Détecteur de propagande</div>
     <div class="card-text" style="margin-bottom:1rem;">Lis chaque message et identifie la technique de propagande utilisée. Attention, certains messages sont des informations neutres !</div>
 
     <div class="prop-game" id="propGame">
-      <!-- Prop 1 -->
       <div class="prop-card" data-correct="peur">
         <div class="prop-message">« Si nous n'arrêtons pas immédiatement TOUTE immigration, nos écoles seront submergées, nos hôpitaux s'effondreront et notre culture disparaîtra d'ici 5 ans ! »</div>
         <div class="prop-btns">
@@ -1320,7 +1499,6 @@ body::before {
         <div class="prop-explain">Cette phrase utilise l'<strong>appel à la peur</strong> : elle exagère volontairement les conséquences (« s'effondreront », « disparaîtra ») pour provoquer la panique et pousser à des mesures extrêmes. Les termes absolus (« TOUTE », « d'ici 5 ans ») sont des signaux d'alerte.</div>
       </div>
 
-      <!-- Prop 2 -->
       <div class="prop-card" data-correct="neutre">
         <div class="prop-message">« Selon l'Office belge des statistiques, le taux de chômage en Wallonie était de 12,3% au troisième trimestre 2025, en baisse de 0,5 point par rapport à l'année précédente. »</div>
         <div class="prop-btns">
@@ -1332,7 +1510,6 @@ body::before {
         <div class="prop-explain">C'est une <strong>information neutre et factuelle</strong>. Elle cite une source officielle, donne un chiffre précis et un contexte (évolution). C'est ce type d'information qu'il faut rechercher pour se forger une opinion éclairée.</div>
       </div>
 
-      <!-- Prop 3 -->
       <div class="prop-card" data-correct="bouc">
         <div class="prop-message">« Tous les problèmes de notre pays viennent des étrangers. Sans eux, il n'y aurait ni chômage, ni insécurité, ni dette publique. La solution est simple : fermez les frontières ! »</div>
         <div class="prop-btns">
@@ -1344,7 +1521,6 @@ body::before {
         <div class="prop-explain">C'est la technique du <strong>bouc émissaire</strong> : un groupe entier est désigné comme responsable de TOUS les problèmes. En réalité, le chômage, l'insécurité et la dette ont des causes multiples et complexes. Simplifier à l'extrême est un signe de manipulation.</div>
       </div>
 
-      <!-- Prop 4 -->
       <div class="prop-card" data-correct="populisme">
         <div class="prop-message">« Les élites politiques vivent dans des palais pendant que VOUS, le vrai peuple, vous souffrez ! Moi seul comprends vos problèmes, moi seul peut vous sauver. Les autres sont tous corrompus ! »</div>
         <div class="prop-btns">
@@ -1356,7 +1532,6 @@ body::before {
         <div class="prop-explain">C'est du <strong>populisme</strong> (appel au peuple) : le message oppose « le peuple » aux « élites », se présente comme le seul sauveur (« moi seul ») et discrédite tous les autres. C'est une technique classique des mouvements autoritaires qui cherchent à concentrer le pouvoir.</div>
       </div>
 
-      <!-- Prop 5 -->
       <div class="prop-card" data-correct="desinfo">
         <div class="prop-message">« EXCLUSIF : Un rapport secret prouve que le gouvernement cache un plan pour remplacer 50% de la population d'ici 2030 ! Partagez avant que ce soit censuré !!! »</div>
         <div class="prop-btns">
@@ -1368,7 +1543,6 @@ body::before {
         <div class="prop-explain">C'est de la <strong>désinformation</strong> pure. Les signaux d'alerte : « EXCLUSIF », « rapport secret », un chiffre sensationnel invérifiable, l'urgence artificielle (« partagez avant censure »), les points d'exclamation. Ce type de message est conçu pour devenir viral et semer le doute dans la population.</div>
       </div>
 
-      <!-- Prop 6 -->
       <div class="prop-card" data-correct="desinfo">
         <div class="prop-message">« D'après une étude de l'Université de Harvard (qui n'existe pas en réalité), 87% des médias traditionnels mentent délibérément au public. Ne faites confiance à personne, sauf à notre chaîne ! »</div>
         <div class="prop-btns">
@@ -1382,7 +1556,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Russia / ingérence -->
   <div class="card">
     <div class="card-title">🌐 Focus : L'ingérence russe dans les démocraties</div>
     <div class="card-text">
@@ -1410,7 +1583,6 @@ body::before {
         <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Soutien simultané aux extrêmes de gauche ET de droite pour diviser la société.</p>
       </div>
     </div>
-
     <div class="info-box purple" style="margin-top:1.5rem;">
       <h4>🛡️ Comment se protéger ?</h4>
       <p><strong>Vérifier les sources</strong> : d'où vient l'information ? Est-elle reprise par plusieurs médias fiables ? <strong>Se méfier des émotions</strong> : si un message te met très en colère ou très en peur, c'est peut-être voulu. <strong>Croiser les informations</strong> : comparer au moins 3 sources différentes. <strong>Développer l'esprit critique</strong> : se poser la question « à qui profite ce message ? »</p>
@@ -1477,13 +1649,10 @@ body::before {
     <div class="vote-results" id="voteResults">
       <h4 style="margin-bottom:1rem; font-family:'Playfair Display',serif;">📊 Résultats de l'élection dans la classe</h4>
       <div id="resultsContainer"></div>
-
-      <div class="info-box green" style="margin-top:1.5rem;" id="voteConclusion">
-      </div>
+      <div class="info-box green" style="margin-top:1.5rem;" id="voteConclusion"></div>
     </div>
   </div>
 
-  <!-- Scenario: 4 ans plus tard -->
   <div class="scenario-box" id="scenario2Box" style="display:none;">
     <div class="scenario-title">⏰ Scénario : 4 ans plus tard...</div>
     <div class="scenario-text" id="scenario2Text"></div>
@@ -1509,54 +1678,20 @@ body::before {
     <p>Vérifie tout ce que tu as appris à travers cette exploration.</p>
   </div>
 
-  <!-- Timeline -->
   <div class="card">
     <div class="card-title">📅 Quelques repères historiques</div>
     <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-date">~500 av. J.-C.</div>
-        <div class="tl-title">Athènes : naissance de la démocratie</div>
-        <div class="tl-text">Les citoyens athéniens votent directement les lois. C'est la première démocratie directe connue, bien qu'exclue les femmes, les esclaves et les étrangers.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1789</div>
-        <div class="tl-title">Révolution française</div>
-        <div class="tl-text">Déclaration des Droits de l'Homme et du Citoyen. Les idées de liberté, égalité et fraternité se répandent en Europe.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1831</div>
-        <div class="tl-title">La Belgique devient indépendante</div>
-        <div class="tl-text">Adoption d'une Constitution qui est l'une des plus libérales d'Europe. Monarchie constitutionnelle parlementaire.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1917</div>
-        <div class="tl-title">Révolution russe</div>
-        <div class="tl-text">Le communisme arrive au pouvoir en Russie. Naissance de l'URSS. L'idéal d'égalité se transforme rapidement en dictature.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1933-1945</div>
-        <div class="tl-title">Le nazisme en Allemagne</div>
-        <div class="tl-text">Hitler arrive au pouvoir par les urnes, puis transforme la démocratie en dictature. La propagande joue un rôle central. Cet exemple montre la fragilité de la démocratie.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1948</div>
-        <div class="tl-title">Déclaration universelle des droits de l'homme</div>
-        <div class="tl-text">L'ONU adopte ce texte fondateur qui reconnaît les droits et libertés fondamentaux de tous les êtres humains.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">1989</div>
-        <div class="tl-title">Chute du mur de Berlin</div>
-        <div class="tl-text">Fin symbolique du communisme en Europe de l'Est. Les peuples choisissent la démocratie et l'économie de marché.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">2016-aujourd'hui</div>
-        <div class="tl-title">Ère de la désinformation numérique</div>
-        <div class="tl-text">Les réseaux sociaux deviennent des outils de manipulation. Ingérences étrangères documentées dans les élections de plusieurs démocraties.</div>
-      </div>
+      <div class="tl-item"><div class="tl-date">~500 av. J.-C.</div><div class="tl-title">Athènes : naissance de la démocratie</div><div class="tl-text">Les citoyens athéniens votent directement les lois. C'est la première démocratie directe connue, bien qu'exclue les femmes, les esclaves et les étrangers.</div></div>
+      <div class="tl-item"><div class="tl-date">1789</div><div class="tl-title">Révolution française</div><div class="tl-text">Déclaration des Droits de l'Homme et du Citoyen. Les idées de liberté, égalité et fraternité se répandent en Europe.</div></div>
+      <div class="tl-item"><div class="tl-date">1831</div><div class="tl-title">La Belgique devient indépendante</div><div class="tl-text">Adoption d'une Constitution qui est l'une des plus libérales d'Europe. Monarchie constitutionnelle parlementaire.</div></div>
+      <div class="tl-item"><div class="tl-date">1917</div><div class="tl-title">Révolution russe</div><div class="tl-text">Le communisme arrive au pouvoir en Russie. Naissance de l'URSS. L'idéal d'égalité se transforme rapidement en dictature.</div></div>
+      <div class="tl-item"><div class="tl-date">1933-1945</div><div class="tl-title">Le nazisme en Allemagne</div><div class="tl-text">Hitler arrive au pouvoir par les urnes, puis transforme la démocratie en dictature. La propagande joue un rôle central. Cet exemple montre la fragilité de la démocratie.</div></div>
+      <div class="tl-item"><div class="tl-date">1948</div><div class="tl-title">Déclaration universelle des droits de l'homme</div><div class="tl-text">L'ONU adopte ce texte fondateur qui reconnaît les droits et libertés fondamentaux de tous les êtres humains.</div></div>
+      <div class="tl-item"><div class="tl-date">1989</div><div class="tl-title">Chute du mur de Berlin</div><div class="tl-text">Fin symbolique du communisme en Europe de l'Est. Les peuples choisissent la démocratie et l'économie de marché.</div></div>
+      <div class="tl-item"><div class="tl-date">2016-aujourd'hui</div><div class="tl-title">Ère de la désinformation numérique</div><div class="tl-text">Les réseaux sociaux deviennent des outils de manipulation. Ingérences étrangères documentées dans les élections de plusieurs démocraties.</div></div>
     </div>
   </div>
 
-  <!-- Tableau de synthèse -->
   <div class="card">
     <div class="card-title">📋 Tableau de synthèse</div>
     <div style="overflow-x:auto;">
@@ -1581,7 +1716,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Quiz final -->
   <div class="card">
     <div class="card-title">🏆 Quiz final : Teste tes connaissances</div>
     <div class="quiz-container" id="quizFinal">
@@ -1595,7 +1729,6 @@ body::before {
         </div>
         <div class="quiz-feedback">La différence fondamentale est le <strong>cadre démocratique</strong>. En Belgique, si un parti communiste était élu, les citoyens pourraient voter pour un autre parti aux élections suivantes. En Corée du Nord, cette possibilité n'existe pas.</div>
       </div>
-
       <div class="quiz-question" data-correct="1">
         <div class="quiz-q-text"><span class="quiz-q-num">2</span> La propagande est dangereuse pour les démocraties parce que...</div>
         <div class="quiz-options">
@@ -1606,7 +1739,6 @@ body::before {
         </div>
         <div class="quiz-feedback">La propagande est une menace pour la démocratie car elle fausse le choix éclairé des citoyens. Si les votes sont basés sur des mensonges et la manipulation des émotions, la démocratie ne fonctionne plus correctement.</div>
       </div>
-
       <div class="quiz-question" data-correct="3">
         <div class="quiz-q-text"><span class="quiz-q-num">3</span> Comment la Russie utilise-t-elle la propagande contre les démocraties occidentales ?</div>
         <div class="quiz-options">
@@ -1617,7 +1749,6 @@ body::before {
         </div>
         <div class="quiz-feedback">La Russie utilise des campagnes de désinformation en ligne, des faux comptes, et soutient simultanément les mouvements extrêmes de gauche et de droite pour affaiblir la cohésion des démocraties.</div>
       </div>
-
       <div class="quiz-question" data-correct="0">
         <div class="quiz-q-text"><span class="quiz-q-num">4</span> Un citoyen voit un message viral sur les réseaux sociaux affirmant que le gouvernement prépare un « plan secret ». Que devrait-il faire ?</div>
         <div class="quiz-options">
@@ -1628,7 +1759,6 @@ body::before {
         </div>
         <div class="quiz-feedback">L'esprit critique est la meilleure arme contre la propagande : vérifier la source, croiser les informations avec des médias fiables, et se demander « à qui profite ce message ? »</div>
       </div>
-
       <div class="quiz-question" data-correct="2">
         <div class="quiz-q-text"><span class="quiz-q-num">5</span> En démocratie, est-il possible de voter pour un parti d'extrême droite ou d'extrême gauche ?</div>
         <div class="quiz-options">
@@ -1642,12 +1772,35 @@ body::before {
     </div>
   </div>
 
-  <!-- Score final -->
-  <div class="card" id="finalScoreCard" style="display:none; text-align:center; border: 1px solid rgba(6,182,212,0.3);">
-    <div style="font-size:3rem; margin-bottom:0.5rem;">🎓</div>
-    <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; margin-bottom:0.5rem;">Félicitations !</div>
-    <div id="finalScoreText" style="color:var(--text-secondary); font-size:1.05rem; line-height:1.7;"></div>
-    <div style="margin-top:1.5rem;">
+  <!-- Score final avec récapitulatif par niveau -->
+  <div class="card" id="finalScoreCard" style="display:none; border: 1px solid rgba(6,182,212,0.3);">
+    <div style="text-align:center;">
+      <div style="font-size:3rem; margin-bottom:0.5rem;">🎓</div>
+      <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; margin-bottom:0.5rem;">Félicitations <span id="finalStudentName"></span> !</div>
+      <div id="finalScoreText" style="color:var(--text-secondary); font-size:1.05rem; line-height:1.7;"></div>
+    </div>
+
+    <!-- Tableau récapitulatif par module -->
+    <div style="margin-top:2rem;">
+      <h4 style="font-family:'Playfair Display',serif; margin-bottom:1rem;">📊 Récapitulatif par module</h4>
+      <div style="overflow-x:auto;">
+        <table class="recap-table" id="recapTable">
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>Points</th>
+              <th>Pourcentage</th>
+              <th>Temps</th>
+            </tr>
+          </thead>
+          <tbody id="recapBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="sendStatusFinal" class="send-status" style="display:block; text-align:center; margin-top:1rem;"></div>
+
+    <div style="margin-top:1.5rem; text-align:center;">
       <button class="btn-primary" onclick="resetAll()">🔄 Recommencer</button>
     </div>
   </div>
@@ -1662,7 +1815,12 @@ body::before {
 </div>
 
 <script>
+// ===== CONFIGURATION =====
+// REMPLACEZ cette URL par celle de votre Google Apps Script déployé
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyMYgn01zCDI6L8dNbUhxVF3bgH8s2p-8M5msHSVxziwY7hH8NZKdZ6OrrGK2TyBZ3L_g/exec';
+
 // ===== STATE =====
+let studentName = '';
 let score = 0;
 let correctCount = 0;
 let totalAnswered = 0;
@@ -1672,14 +1830,115 @@ let allVotes = {};
 const sectionOrder = ['intro','democratie','dictature','ideologies','propagande','vote','bilan'];
 let visitedSections = new Set(['intro']);
 
+// ===== MODULE TRACKING =====
+const moduleConfig = {
+  democratie:  { name: 'Module 1 — Démocratie', maxPoints: 40, totalQuestions: 4 },
+  dictature:   { name: 'Module 2 — Dictature', maxPoints: 50, totalQuestions: 5 },
+  ideologies:  { name: 'Module 3 — Idéologies', maxPoints: 50, totalQuestions: 5 },
+  propagande:  { name: 'Module 4 — Propagande', maxPoints: 90, totalQuestions: 6 },
+  vote:        { name: 'Module 5 — Simulation', maxPoints: 30, totalQuestions: 2 },
+  bilan:       { name: 'Module 6 — Bilan', maxPoints: 50, totalQuestions: 5 }
+};
+
+let moduleScores = {};
+let moduleCorrect = {};
+let moduleAnswered = {};
+let moduleStartTime = {};
+let moduleElapsedTime = {};
+let moduleSent = {};
+let currentSection = 'intro';
+let globalStartTime = null;
+let timerInterval = null;
+
+// Initialize module tracking
+Object.keys(moduleConfig).forEach(key => {
+  moduleScores[key] = 0;
+  moduleCorrect[key] = 0;
+  moduleAnswered[key] = 0;
+  moduleElapsedTime[key] = 0;
+  moduleSent[key] = false;
+});
+
+// ===== NAME INPUT =====
+const nameInput = document.getElementById('studentNameInput');
+const nameSubmitBtn = document.getElementById('nameSubmitBtn');
+
+nameInput.addEventListener('input', function() {
+  const val = this.value.trim();
+  if (val.length >= 2) {
+    nameSubmitBtn.classList.add('enabled');
+  } else {
+    nameSubmitBtn.classList.remove('enabled');
+  }
+});
+
+nameInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitName();
+});
+
+function submitName() {
+  const val = nameInput.value.trim();
+  if (val.length < 2) {
+    document.getElementById('nameError').textContent = 'Entre au moins 2 caractères.';
+    return;
+  }
+  studentName = val;
+  document.getElementById('nameOverlay').classList.add('hidden');
+  document.getElementById('heroWelcome').textContent = `Bienvenue, ${studentName} ! 👋`;
+  
+  // Start global timer
+  globalStartTime = Date.now();
+  startTimer();
+}
+
+// ===== TIMER =====
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (!globalStartTime) return;
+    const elapsed = Math.floor((Date.now() - globalStartTime) / 1000);
+    document.getElementById('timerDisplay').textContent = formatTime(elapsed);
+  }, 1000);
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function formatTimeMinSec(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (m === 0) return s + 's';
+  return m + 'min ' + String(s).padStart(2,'0') + 's';
+}
+
 // ===== NAVIGATION =====
 function goTo(sectionId) {
+  // Record elapsed time for previous module section
+  if (currentSection && moduleConfig[currentSection] && moduleStartTime[currentSection]) {
+    moduleElapsedTime[currentSection] += Math.floor((Date.now() - moduleStartTime[currentSection]) / 1000);
+    moduleStartTime[currentSection] = null;
+    
+    // Check if module is complete and send data
+    checkAndSendModule(currentSection);
+  }
+  
+  // Switch section
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(sectionId).classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.section === sectionId);
   });
+  
   visitedSections.add(sectionId);
+  currentSection = sectionId;
+  
+  // Start timer for new module section
+  if (moduleConfig[sectionId]) {
+    moduleStartTime[sectionId] = Date.now();
+  }
+  
   updateProgress();
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
@@ -1711,11 +1970,100 @@ function updateProgress() {
 function addScore(pts) {
   score += pts;
   document.getElementById('scoreVal').textContent = score;
+  
+  // Attribute points to current module
+  if (currentSection && moduleConfig[currentSection]) {
+    moduleScores[currentSection] += pts;
+  }
 }
 
 function updateCorrect() {
   document.getElementById('correctVal').textContent = correctCount;
   document.getElementById('totalVal').textContent = totalAnswered;
+}
+
+// ===== MODULE COMPLETION CHECK =====
+function checkAndSendModule(moduleId) {
+  if (!moduleConfig[moduleId] || moduleSent[moduleId]) return;
+  
+  const config = moduleConfig[moduleId];
+  
+  // Check if all questions in this module are answered
+  if (moduleAnswered[moduleId] >= config.totalQuestions) {
+    moduleSent[moduleId] = true;
+    
+    // Mark tab as complete
+    const checkEl = document.getElementById('check-' + moduleId);
+    if (checkEl) checkEl.classList.add('done');
+    
+    // Send to Google Sheets
+    sendModuleResult(moduleId);
+  }
+}
+
+// ===== GOOGLE SHEETS INTEGRATION =====
+function sendModuleResult(moduleId) {
+  const config = moduleConfig[moduleId];
+  const pts = moduleScores[moduleId];
+  const maxPts = config.maxPoints;
+  const pct = maxPts > 0 ? Math.round((pts / maxPts) * 100) : 0;
+  const time = formatTimeMinSec(moduleElapsedTime[moduleId]);
+  
+  const data = {
+    prenom: studentName,
+    niveau: config.name,
+    points: pts + ' / ' + maxPts,
+    pourcentage: pct + '%',
+    temps: time
+  };
+  
+  sendToGoogleSheets(data);
+}
+
+function sendFinalResult() {
+  const totalMax = Object.values(moduleConfig).reduce((s, c) => s + c.maxPoints, 0);
+  const totalPct = totalMax > 0 ? Math.round((score / totalMax) * 100) : 0;
+  const totalTime = globalStartTime ? formatTimeMinSec(Math.floor((Date.now() - globalStartTime) / 1000)) : '—';
+  
+  const data = {
+    prenom: studentName,
+    niveau: '🏆 RÉSULTAT FINAL',
+    points: score + ' / ' + totalMax,
+    pourcentage: totalPct + '%',
+    temps: totalTime
+  };
+  
+  sendToGoogleSheets(data, 'sendStatusFinal');
+}
+
+function sendToGoogleSheets(data, statusElementId) {
+  if (GOOGLE_SHEETS_URL === 'VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI') {
+    console.log('[DémocratieLab] Données à envoyer :', data);
+    return;
+  }
+  
+  const statusEl = statusElementId ? document.getElementById(statusElementId) : null;
+  if (statusEl) {
+    statusEl.className = 'send-status show sending';
+    statusEl.textContent = '⏳ Envoi des résultats…';
+  }
+  
+  const url = GOOGLE_SHEETS_URL + '?' + new URLSearchParams(data).toString();
+  
+  fetch(url, { mode: 'no-cors' })
+    .then(() => {
+      if (statusEl) {
+        statusEl.className = 'send-status show success';
+        statusEl.textContent = '✓ Résultats envoyés avec succès !';
+      }
+    })
+    .catch(err => {
+      console.error('Erreur envoi:', err);
+      if (statusEl) {
+        statusEl.className = 'send-status show error';
+        statusEl.textContent = '✗ Erreur d\'envoi. Les résultats sont affichés ci-dessus.';
+      }
+    });
 }
 
 // ===== QUIZ ENGINE =====
@@ -1732,17 +2080,28 @@ document.querySelectorAll('.quiz-question').forEach(q => {
       
       totalAnswered++;
       
+      // Track module-level answering
+      if (currentSection && moduleConfig[currentSection]) {
+        moduleAnswered[currentSection]++;
+      }
+      
       if (clickedIdx === correctIdx) {
         this.classList.add('correct');
         feedback.classList.add('show', 'correct-fb');
         correctCount++;
         addScore(10);
+        if (currentSection && moduleConfig[currentSection]) {
+          moduleCorrect[currentSection]++;
+        }
       } else {
         this.classList.add('wrong');
         q.querySelectorAll('.quiz-opt')[correctIdx].classList.add('correct');
         feedback.classList.add('show', 'wrong-fb');
       }
       updateCorrect();
+      
+      // Check completion after each answer
+      if (currentSection) checkAndSendModule(currentSection);
     });
   });
 });
@@ -1793,11 +2152,19 @@ function checkProp(btn) {
   const explain = card.querySelector('.prop-explain');
 
   totalAnswered++;
+  
+  // Track for propagande module
+  if (currentSection && moduleConfig[currentSection]) {
+    moduleAnswered[currentSection]++;
+  }
 
   if (clicked === correct) {
     btn.classList.add('correct-ans');
     correctCount++;
     addScore(15);
+    if (currentSection && moduleConfig[currentSection]) {
+      moduleCorrect[currentSection]++;
+    }
   } else {
     btn.classList.add('wrong-ans');
     card.querySelectorAll('.prop-btn').forEach(b => {
@@ -1806,6 +2173,9 @@ function checkProp(btn) {
   }
   explain.classList.add('show');
   updateCorrect();
+  
+  // Check completion
+  if (currentSection) checkAndSendModule(currentSection);
 }
 
 // ===== VOTE SIMULATION =====
@@ -1819,7 +2189,6 @@ function voteFor(card, party) {
 function submitVote() {
   if (!selectedVote) return;
   
-  // Simulate class votes (random distribution + user's vote)
   const parties = {
     solidarite: { name: 'Parti Solidarité', color: '#ef4444', votes: Math.floor(Math.random()*8)+2 },
     liberte: { name: 'Mouvement Liberté', color: '#3b82f6', votes: Math.floor(Math.random()*8)+2 },
@@ -1834,7 +2203,6 @@ function submitVote() {
   const container = document.getElementById('resultsContainer');
   container.innerHTML = '';
 
-  // Sort by votes
   const sorted = Object.entries(parties).sort((a,b) => b[1].votes - a[1].votes);
   const winner = sorted[0];
 
@@ -1865,6 +2233,13 @@ function submitVote() {
   document.getElementById('voteResults').classList.add('show');
   document.getElementById('voteBtn').disabled = true;
   addScore(20);
+  
+  // Track for vote module
+  moduleAnswered['vote']++;
+  moduleCorrect['vote']++;
+  
+  // Check completion
+  checkAndSendModule('vote');
 
   // Show scenario 2
   const s2 = document.getElementById('scenario2Box');
@@ -1879,6 +2254,7 @@ function submitVote() {
 const scenarioAnswers = {
   scenario1: {
     correct: 1,
+    module: 'ideologies',
     responses: [
       "Non ! En démocratie, aucun parti ne reste au pouvoir « pour toujours ». Les élections régulières garantissent que le peuple peut toujours exprimer un nouveau choix.",
       "Exactement ! C'est la force fondamentale de la démocratie. Le pouvoir de changement pacifique par les urnes. Même si un parti communiste, socialiste ou libéral est élu, les citoyens conservent le pouvoir de changer de direction.",
@@ -1886,7 +2262,8 @@ const scenarioAnswers = {
     ]
   },
   scenario2: {
-    correct: -1, // all valid
+    correct: -1,
+    module: 'vote',
     responses: [
       "C'est tout à fait ton droit ! En démocratie, la fidélité à un parti est un choix respectable. Tu as évalué le bilan et tu es satisfait(e).",
       "C'est aussi ton droit ! C'est exactement ce mécanisme qui fait la force de la démocratie : la possibilité de sanctionner un gouvernement qui déçoit et de donner sa chance à un autre projet.",
@@ -1906,16 +2283,135 @@ function chooseScenario(id, idx) {
 
   const result = document.getElementById(id + '-result');
   const data = scenarioAnswers[id];
+  const moduleId = data.module;
   
   if (data.correct === -1 || idx === data.correct) {
     addScore(10);
     correctCount++;
+    if (moduleId && moduleConfig[moduleId]) {
+      moduleCorrect[moduleId]++;
+    }
   }
   totalAnswered++;
+  
+  if (moduleId && moduleConfig[moduleId]) {
+    moduleAnswered[moduleId]++;
+  }
+  
   updateCorrect();
 
   result.innerHTML = data.responses[idx];
   result.classList.add('show');
+  
+  // Check completion
+  if (moduleId) checkAndSendModule(moduleId);
+}
+
+// ===== FINAL SCORE =====
+document.getElementById('quizFinal').addEventListener('click', function() {
+  setTimeout(() => {
+    const qs = this.querySelectorAll('.quiz-question');
+    let all = true;
+    qs.forEach((q, i) => {
+      const qId = 'quizFinal-' + i;
+      if (!answeredQuestions.has(qId)) all = false;
+    });
+    if (all) showFinalScore();
+  }, 300);
+});
+
+function showFinalScore() {
+  const card = document.getElementById('finalScoreCard');
+  if (card.style.display === 'block') return;
+  card.style.display = 'block';
+  
+  // Finalize current module time
+  if (moduleStartTime['bilan']) {
+    moduleElapsedTime['bilan'] += Math.floor((Date.now() - moduleStartTime['bilan']) / 1000);
+    moduleStartTime['bilan'] = null;
+  }
+  
+  const totalMax = Object.values(moduleConfig).reduce((s, c) => s + c.maxPoints, 0);
+  const pct = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+  const totalTime = globalStartTime ? formatTimeMinSec(Math.floor((Date.now() - globalStartTime) / 1000)) : '—';
+  
+  document.getElementById('finalStudentName').textContent = studentName;
+  
+  let msg = '';
+  if (pct >= 80) msg = `Tu as obtenu <strong>${score} / ${totalMax} points</strong> avec <strong>${pct}%</strong> de bonnes réponses en <strong>${totalTime}</strong>. Excellent ! Tu as une très bonne compréhension des systèmes politiques. Tu es un citoyen éclairé !`;
+  else if (pct >= 60) msg = `Tu as obtenu <strong>${score} / ${totalMax} points</strong> avec <strong>${pct}%</strong> de bonnes réponses en <strong>${totalTime}</strong>. Bon travail ! Tu as une bonne base de compréhension. Continue à t'informer !`;
+  else msg = `Tu as obtenu <strong>${score} / ${totalMax} points</strong> avec <strong>${pct}%</strong> de bonnes réponses en <strong>${totalTime}</strong>. C'est un début ! N'hésite pas à relire les modules et à refaire les activités pour mieux comprendre ces concepts essentiels.`;
+  
+  document.getElementById('finalScoreText').innerHTML = msg;
+  
+  // Build recap table
+  buildRecapTable();
+  
+  // Send final result
+  sendFinalResult();
+  
+  launchConfetti();
+  card.scrollIntoView({ behavior: 'smooth' });
+}
+
+function buildRecapTable() {
+  const tbody = document.getElementById('recapBody');
+  tbody.innerHTML = '';
+  
+  let totalPts = 0;
+  let totalMax = 0;
+  let totalTimeSeconds = 0;
+  
+  const colors = {
+    democratie: '#3b82f6',
+    dictature: '#ef4444',
+    ideologies: '#f59e0b',
+    propagande: '#8b5cf6',
+    vote: '#10b981',
+    bilan: '#06b6d4'
+  };
+  
+  Object.keys(moduleConfig).forEach(key => {
+    const config = moduleConfig[key];
+    const pts = moduleScores[key];
+    const maxPts = config.maxPoints;
+    const pctVal = maxPts > 0 ? Math.round((pts / maxPts) * 100) : 0;
+    const time = moduleElapsedTime[key];
+    const color = colors[key] || '#3b82f6';
+    
+    totalPts += pts;
+    totalMax += maxPts;
+    totalTimeSeconds += time;
+    
+    tbody.innerHTML += `
+      <tr>
+        <td style="font-weight:600;">${config.name}</td>
+        <td>${pts} / ${maxPts}</td>
+        <td>
+          ${pctVal}%
+          <div class="recap-pct-bar">
+            <div class="recap-pct-fill" style="width:${pctVal}%; background:${color};"></div>
+          </div>
+        </td>
+        <td>${formatTimeMinSec(time)}</td>
+      </tr>
+    `;
+  });
+  
+  const totalPct = totalMax > 0 ? Math.round((totalPts / totalMax) * 100) : 0;
+  tbody.innerHTML += `
+    <tr>
+      <td>🏆 TOTAL</td>
+      <td>${totalPts} / ${totalMax}</td>
+      <td>
+        ${totalPct}%
+        <div class="recap-pct-bar">
+          <div class="recap-pct-fill" style="width:${totalPct}%; background:linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));"></div>
+        </div>
+      </td>
+      <td>${formatTimeMinSec(totalTimeSeconds)}</td>
+    </tr>
+  `;
 }
 
 // ===== CONFETTI =====
@@ -1937,56 +2433,26 @@ function launchConfetti() {
   }
 }
 
-// Check if all quizzes completed for final section
-const observer = new MutationObserver(() => {
-  const bilanSection = document.getElementById('bilan');
-  if (bilanSection.classList.contains('active')) {
-    const finalQuiz = document.getElementById('quizFinal');
-    const qs = finalQuiz.querySelectorAll('.quiz-question');
-    const answered = Array.from(qs).filter(q => {
-      const qId = 'quizFinal-' + Array.from(finalQuiz.children).indexOf(q);
-      return answeredQuestions.has(qId);
-    });
-    if (answered.length === qs.length) {
-      showFinalScore();
-    }
-  }
-});
-
-// Watch for quiz answers in bilan
-document.getElementById('quizFinal').addEventListener('click', function() {
-  setTimeout(() => {
-    const qs = this.querySelectorAll('.quiz-question');
-    let all = true;
-    qs.forEach((q, i) => {
-      const qId = 'quizFinal-' + i;
-      if (!answeredQuestions.has(qId)) all = false;
-    });
-    if (all) showFinalScore();
-  }, 300);
-});
-
-function showFinalScore() {
-  const card = document.getElementById('finalScoreCard');
-  if (card.style.display === 'block') return;
-  card.style.display = 'block';
-  
-  const pct = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
-  let msg = '';
-  if (pct >= 80) msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. Excellent ! Tu as une très bonne compréhension des systèmes politiques. Tu es un citoyen éclairé !`;
-  else if (pct >= 60) msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. Bon travail ! Tu as une bonne base de compréhension. Continue à t'informer !`;
-  else msg = `Tu as obtenu <strong>${score} points</strong> avec <strong>${pct}%</strong> de bonnes réponses. C'est un début ! N'hésite pas à relire les modules et à refaire les activités pour mieux comprendre ces concepts essentiels.`;
-  
-  document.getElementById('finalScoreText').innerHTML = msg;
-  launchConfetti();
-  card.scrollIntoView({ behavior: 'smooth' });
-}
-
 function resetAll() {
   score = 0; correctCount = 0; totalAnswered = 0;
   answeredQuestions.clear();
   selectedVote = null;
   visitedSections = new Set(['intro']);
+  
+  // Reset module tracking
+  Object.keys(moduleConfig).forEach(key => {
+    moduleScores[key] = 0;
+    moduleCorrect[key] = 0;
+    moduleAnswered[key] = 0;
+    moduleElapsedTime[key] = 0;
+    moduleSent[key] = false;
+    moduleStartTime[key] = null;
+    
+    const checkEl = document.getElementById('check-' + key);
+    if (checkEl) checkEl.classList.remove('done');
+  });
+  
+  globalStartTime = Date.now();
   
   document.getElementById('scoreVal').textContent = '0';
   document.getElementById('correctVal').textContent = '0';
@@ -1996,7 +2462,6 @@ function resetAll() {
   document.getElementById('voteBtn').disabled = true;
   document.getElementById('scenario2Box').style.display = 'none';
   
-  // Reset quizzes
   document.querySelectorAll('.quiz-opt').forEach(o => {
     o.classList.remove('correct','wrong','selected');
   });
@@ -2023,6 +2488,7 @@ function resetAll() {
 
 // Init
 updateProgress();
+setTimeout(() => nameInput.focus(), 500);
 </script>
 </body>
 </html>
